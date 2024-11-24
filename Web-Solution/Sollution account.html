@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:type" content="website" />
+    <meta property="og:image:type" content="image/jpeg">
+
+    <link rel="icon" type="image/png" href="images2/peharge-logo3.4.png" />
+    <meta property="og:image:width" content="300">
+    <meta property="og:image:height" content="300">
+    <meta property="og:updated_time" content="1440432930" />
+
+    <title>Anmeldung</title>
+    <style>
+        body {
+            font-family: Calibri, sans-serif;
+            background-image: url('images/Himmel.jpg'); /* Hintergrundbild setzen */
+            background-size: cover; /* Bild an den Bildschirm anpassen */
+            background-repeat: no-repeat; /* Bild nicht wiederholen */
+            background-position: center; /* Bild zentrieren */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            padding: 60px;
+            text-align: center;
+            background: radial-gradient(circle,
+                rgba(175, 175, 175, 0.3) 0%,
+                rgba(202, 202, 202, 0.3) 50%,
+                rgba(170, 170, 170, 0.3) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+            display: flex;
+            flex-direction: column; /* Elemente untereinander anordnen */
+            justify-content: center; /* Zentrieren der Elemente */
+            align-items: center; /* Zentrieren der Elemente */
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+        h1 {
+            margin-bottom: 30px;
+            color: #ffffff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        button[type="submit"] {
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+            border: none;
+            width: 200px;
+            height: 45px;
+            border-radius: 25px;
+            padding: 0px 7px;
+            color: #fff;
+            font-size: 15px;
+            background-color: transparent;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4);
+        }
+
+
+        button[type="submit"]:hover {
+            border: 2px solid transparent;
+            color: #fff;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+            -1px -1px 6px rgba(255, 255, 255, 0.4),
+            inset 3px 3px 10px rgba(0,0,0,1),
+            inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 1),  /* Schwarzer starker Schatten */
+            -1px -1px 6px rgba(255, 255, 255, 0.4); /* Weißer subtiler Schatten */
+        }
+
+        button[type="submit2"] {
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+            border: none;
+            width: 200px;
+            height: 45px;
+            border-radius: 25px;
+            padding: 0px 7px;
+            color: #fff;
+            font-size: 15px;
+            background-color: transparent;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4);
+        }
+
+        .sparkle {
+            fill: #ffffff;
+            transition: all 800ms ease;
+        }
+
+        .text {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: medium;
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+            height: 100%; /* Höhe auf 100% setzen, um die gesamte Höhe des Containers zu nutzen */
+        }
+
+
+        .text2 {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: small;
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+            height: 100%; /* Höhe auf 100% setzen */
+        }
+
+
+        button[type="submit2"]:hover {
+            border: 2px solid transparent;
+            color: #fff;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+            -1px -1px 6px rgba(255, 255, 255, 0.4),
+            inset 3px 3px 10px rgba(0,0,0,1),
+            inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 1),  /* Schwarzer starker Schatten */
+            -1px -1px 6px rgba(255, 255, 255, 0.4); /* Weißer subtiler Schatten */
+        }
+
+        /* Styling für das Datenschutzerklärungs-Checkbox-Element */
+        /* From Uiverse.io by AmIt-DasIT */ 
+        .container-usern {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            position: relative;
+            color: white;
+        }
+
+        .container-usern .label {
+            font-size: 15px;
+            padding-left: 10px;
+            position: absolute;
+            top: 13px;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+
+        .input {
+            width: 200px;
+            height: 45px;
+            border: none;
+            outline: none;
+            padding: 0px 7px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 15px;
+            background-color: transparent;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+            -1px -1px 6px rgba(255, 255, 255, 0.4);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 1),  /* Schwarzer starker Schatten */
+            -1px -1px 6px rgba(255, 255, 255, 0.4); /* Weißer subtiler Schatten */
+        }
+
+        .input:focus {
+            border: 2px solid transparent;
+            color: #fff;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+            -1px -1px 6px rgba(255, 255, 255, 0.4),
+            inset 3px 3px 10px rgba(0,0,0,1),
+            inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+        }
+
+        .container-usern .input:valid ~ .label,
+        .container-usern .input:focus ~ .label {
+        transition: 0.3s;
+        padding-left: 2px;
+        transform: translateY(-35px);
+        }
+
+        .container-usern .input:valid,
+        .container-usern .input:focus {
+        box-shadow: 3px 3px 10px rgba(0,0,0,1),
+        -1px -1px 6px rgba(255, 255, 255, 0.4),
+        inset 3px 3px 10px rgba(0,0,0,1),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Hide the default checkbox */
+        .consent {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Style for the label */
+        #consent-container {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        #consent-label {
+            cursor: pointer;
+        }
+
+        /* Container, um die Checkbox zu zentrieren */
+        .checkbox-container {
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+        }
+
+        .checkmark {
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+            position: relative;
+            height: 20px; /* Höhe auf 20px erhöht */
+            width: 20px;  /* Breite auf 20px erhöht */
+            border: none;
+            outline: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 15px;
+            background-color: transparent;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+                        -1px -1px 6px rgba(255, 255, 255, 0.4);
+            display: block; /* Um sicherzustellen, dass Margin auto funktioniert */
+            border-radius: 7px; /* Runde Ecken */
+            margin-left: 90%; /* Verschiebung um 20% nach rechts */
+        }
+
+
+
+        /* When the checkbox is checked, add a background to the checkmark */
+        .consent:checked + .checkmark {
+            border: 2px solid transparent;
+            color: #fff;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+            -1px -1px 6px rgba(255, 255, 255, 0.4),
+            inset 3px 3px 10px rgba(0,0,0,1),
+            inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the checkmark when checked */
+        .consent:checked + .checkmark:after {
+            display: block;
+        }
+
+        /* Style the checkmark/indicator */
+        .checkmark:after {
+            left: 0.50em; /* Angepasste Position für bessere Sichtbarkeit */
+            top: 0.20em;  /* Angepasste Position für bessere Sichtbarkeit */
+            width: 0.3em; /* Dünneres Häkchen */
+            height: 0.7em;
+            border: solid rgb(72, 255, 0); /* Farbe des Häkchens */
+            border-width: 0 0.15em 0.15em 0;
+            transform: rotate(45deg);
+        }
+
+                        
+
+
+
+    </style>
+</head>
+<body onload="startFunction()">
+    <div class="container">
+        <img src="images/peharge-logo3.4.png" alt="Bild" width="150" height="150">
+        <h1>Anmeldung erforderlich</h1>
+        <form id="loginForm" onsubmit="return checkCredentials()">
+            <div class="container-usern">
+                <input required="" type="text" id="username" name="username" class="input" required>
+                <label class="label">Username</label>
+            </div>
+            <br><br>
+            <div class="container-usern">
+                <input type="password" id="password" name="password" class="input" required>
+                <label class="label">Passwort</label>
+            </div>
+            <br><br>
+            <div id="consent-container">
+                <label for="consent" id="consent-label">
+                    Ich habe die Datenschutzerklärung<br> gelesen und stimme zu:
+                    <input type="checkbox" id="consent" class="consent" required>
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+            <br>
+            <button type="submit2" onclick="window.location.href='datenschutzerklaerung.html'; return false;">            <span class="text2">Datenschutzerklärung lesen</span></button>
+            <br>
+            <button type="submit">            <span class="text">Anmelden</span></button>
+        </form>
+    </div>
+
+    <script>
+        function startFunction() {
+            // Hier könnten weitere Initialisierungen erfolgen
+        }
+
+        const credentials = {
+            "2": "2",
+            "mathe-pro": "123456789",
+            "jk": "123456789"
+        };
+
+        function checkCredentials() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var consent = document.getElementById("consent").checked;
+
+            // Überprüfe, ob die Datenschutzerklärung akzeptiert wurde
+            if (!consent) {
+                alert("Bitte akzeptieren Sie die Datenschutzerklärung, um fortzufahren.");
+                return false; // Blockiere das Formular, um die Weiterleitung zu verhindern
+            }
+
+            // Überprüfe die Anmeldedaten
+            if (credentials[username] && credentials[username] === password) {
+                window.location.href = "ads-solution.html"; // Weiterleitung zur gewünschten HTML-Datei
+                return false; // Blockiere das Formular, um die Weiterleitung zu ermöglichen
+            } else {
+                alert("Falscher Benutzername oder Passwort! Bitte versuchen Sie es erneut.");
+                return false; // Blockiere das Einloggen
+            }
+        }
+    </script>
+</body>
+</html>

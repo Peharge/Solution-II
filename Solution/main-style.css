@@ -1,0 +1,1689 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+/* Kamera soll das ganze Fenster füllen */
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Taskleiste in der Mitte und um 50px nach oben verschoben */
+.taskbar {
+    position: absolute;
+    bottom: 50px; /* Taskleiste um 50px nach oben verschoben */
+    left: 50%; /* Zentriert horizontal */
+    transform: translateX(-50%); /* Korrektur für horizontale Zentrierung */
+    width: 35%; /* 30% der Breite des Bildschirms */
+    height: 100px;
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.chat-solution {
+    cursor: pointer;
+    display: none; /* Setze display auf block, um das Element sichtbar zu machen */
+    margin: auto;  /* Automatischer Margin für zentrierte Position */
+    position: absolute; /* Positionierung zur Zentrierung */
+    cursor: move;
+    z-index: 10;
+    left: 30%; /* Horizontale Zentrierung */
+    user-select: none; /* Verhindert die Auswahl des Textes beim Ziehen */
+    display: none;
+    width: 40%; /* 30% der Breite des Bildschirms */
+    height: 600px;
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    margin-top: 00px; /* Fügt einen Abstand von 350px nach oben hinzu */
+}
+
+        /* Button für Bild aufnehmen */
+.capture-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border: none;
+    outline: none;
+}
+
+.chat-btn {
+    border: none;
+    width: 6em;
+    height: 4em;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.4) 100%);
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0); /* Farbe des Rahmens */
+    margin-left: 50px; /* Verschiebt das Element um 100px nach rechts */
+}
+
+.sparkle {
+    fill: #666666;
+    transition: all 800ms ease;
+}
+
+.text {
+    font-weight: 600;
+    color: #666666;
+    font-size: medium;
+}
+
+.chat-btn:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border: none;
+    border-radius: 25px;
+    width: 8em;
+    height: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-btn:hover .text {
+    color: white;
+}
+
+.chat-btn:hover .sparkle {
+    fill: white;
+    transform: scale(1.2);
+}
+
+
+/* Rundes Vorschaubild */
+.preview-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid white;
+    object-fit: cover;
+    margin-right: 20px;
+    border: none;
+    border-radius: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.4) 100%);
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.preview-image:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    margin-right: 25px;
+    border-radius: 7em;
+}
+
+.preview-image:hover .text {
+    color: white;
+}
+
+.preview-image:hover .sparkle {
+    fill: white;
+    transform: scale(1.2);
+}
+
+/* Button für Bild aufnehmen */
+.capture-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border: none;
+    outline: none;
+}
+
+.capture-btn {
+    border: none;
+    width: 8em;
+    height: 3em;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.4) 100%);
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0); /* Farbe des Rahmens */
+    margin-left: 50px; /* Verschiebt das Element um 100px nach rechts */
+}
+
+.sparkle {
+    fill: #ffffff;
+    transition: all 800ms ease;
+}
+
+.text {
+    font-weight: 600;
+    color: #ffffff;
+    font-size: medium;
+}
+
+.capture-btn:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border: none;
+    width: 10em;
+    height: 3em;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.capture-btn:hover .text {
+    color: white;
+}
+
+.capture-btn:hover .sparkle {
+    fill: white;
+    transform: scale(1.2);
+}
+
+/* Modal-Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay {
+    overflow-y: scroll;
+    scrollbar-width: thin; /* Für Firefox: Dünne Scrollleiste */
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent; /* Für Firefox: Graue Leiste ohne Hintergrund */
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
+}
+
+/* Für Webkit-basierte Browser (Chrome, Safari) */
+.modal-overlay::-webkit-scrollbar {
+    width: 8px; /* Breite der Scrollleiste */
+}
+
+.modal-overlay::-webkit-scrollbar-thumb {
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.4) 100%);
+    cursor: pointer;
+    transition: all 450ms ease-in-out;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 10px; /* Abgerundete Ecken des Balkens */
+}
+
+.modal-overlay::-webkit-scrollbar-track {
+    background: transparent; /* Hintergrund der Scrollleiste transparent */
+}
+
+
+/* Modal-Container mit Glas-Effekt */
+.modal-container {
+    width: 90%;
+    max-width: 1200px;
+    height: auto; /* Anpassung an die Anzahl der Bilder */
+    max-height: 50%; /* Begrenzung auf 80% der Bildschirmhöhe */
+    top: -20%; /* Verschiebt das Element um 805 Pixel nach unten */
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column; /* Flex für Header und Content */
+    justify-content: flex-start;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Modal-Header für Close-Button */
+.modal-header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end; /* Button rechts ausrichten */
+}
+
+.close-btn {
+    position: fixed; /* Position relativ zur gesamten Seite */
+    top: 10px; /* Abstand von oben */
+    right: 10px; /* Abstand von rechts */
+    cursor: pointer;
+    font-size: 15px;
+    background: transparent;
+    z-index: 1000; /* Sicherstellen, dass der Button über allen Elementen liegt */
+}
+
+
+/* Modal Content - Bilder Raster */
+.modal-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Flexible Spalten */
+    grid-gap: 15px;
+    padding-top: 40px; /* Platz für das X */
+    width: 100%;
+    background: rgba(175, 175, 175, 0);
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0);
+}
+
+/* Bild mit abgerundeten Ecken */
+.image-item {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    background: transparent;
+}
+
+.image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Bild passt sich an den Container an */
+    border-radius: 15px;
+}
+
+/* Datum auf dem Bild */
+.image-item .date {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: #ffffff;
+    background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.4) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+    padding: 5px;
+    border-radius: 5px;
+}
+
+
+/* Remove this container when use*/
+.component-title {
+    width: 100%;
+    position: absolute;
+    z-index: 999;
+    top: 30px;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.chat-solution {
+    display: none; /* Versteckt das Element standardmäßig */
+}
+
+.chat-input {
+    padding: 1rem;
+    border-radius: 1rem;
+    transition: 0.3s;
+    display: flex;
+}
+
+.chat-input {
+    position: absolute; /* Positionierung relativ zum Bildschirm */
+    bottom: 5%; /* 70% nach unten verschoben (d.h. 30% von unten) */
+    left: 50%; /* Horizontale Zentrierung */
+    transform: translateX(-50%); /* Exakte Zentrierung nach links korrigiert */
+    width: 40%; /* 40% der Breite des Bildschirms */
+    height: 50px;
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken */
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.chat-input:active {
+    bottom: 8%; /* 70% nach unten verschoben (d.h. 30% von unten) */
+    left: 50%; /* Horizontale Zentrierung */
+    transform: translateX(-50%); /* Exakte Zentrierung nach links korrigiert */
+    width: 50%; /* 50% der Breite des Bildschirms */
+    height: 60px;
+}
+
+.chat-input:focus {
+    bottom: 8%; /* 70% nach unten verschoben (d.h. 30% von unten) */
+    left: 50%; /* Horizontale Zentrierung */
+    transform: translateX(-50%); /* Exakte Zentrierung nach links korrigiert */
+    width: 50%; /* 50% der Breite des Bildschirms */
+    height: 60px;
+}
+
+
+
+
+/* Cool share button made by: csozi | Website: english.csozi.hu*/
+
+.buttons {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: fit-content;
+    width: fit-content;
+    transition: 0.3s;
+    border-radius: 50%;
+    margin-left: 50px;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.buttons:hover {
+    padding: 60px;
+}
+
+.buttons:hover .button {
+    box-shadow: 5px 5px 12px #cacaca, -5px -5px 12px #ffffff;
+}
+
+.main-button {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 10px;
+    border: none;
+    background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.1) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    box-shadow: 5px 5px 12px #cacaca, -5px -5px 12px #ffffff;
+    border-radius: 50%;
+    transition: 0.2s;
+    z-index: 100;
+}
+
+.button {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    padding: 10px;
+    border: none;
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.4) 100%);
+    backdrop-filter: blur(10px);
+    box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+    transition: 0.3s;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.main-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.discord-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .discord-button {
+    translate: 70px 0px;
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+        inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+        0px 0px 0px 4px rgba(255, 255, 255, 0),
+        0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    display: block; /* SVG-Logo anzeigen, wenn die Klasse "active" hinzugefügt wird */
+}
+
+.twitter-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .twitter-button {
+    translate: 47px -47px;
+
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+        inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+        0px 0px 0px 4px rgba(255, 255, 255, 0),
+        0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    display: block; /* SVG-Logo anzeigen, wenn die Klasse "active" hinzugefügt wird */
+}
+
+.reddit-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .reddit-button {
+translate: 0px -70px;
+
+box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.messenger-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .messenger-button {
+translate: -47px -47px;
+
+box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.pinterest-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .pinterest-button {
+translate: -70px 0px;
+
+box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.instagram-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .instagram-button {
+translate: -47px 47px;
+
+box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.snapchat-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .snapchat-button {
+translate: 0px 70px;
+
+box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+.whatsapp-button:hover {
+    background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+}
+
+.buttons:hover .whatsapp-button {
+translate: 47px 47px;
+
+box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+    inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+    0px 0px 0px 4px rgba(255, 255, 255, 0),
+    0px 0px 180px 0px rgba(153, 23, 255);
+    transform: translateY(-2px);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+/* From Uiverse.io by ArturCodeCraft */ 
+/* <reset-style> ============================ */
+.menu__icon {
+    border: none;
+    background: radial-gradient(circle,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.4) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+    transition: 0.3s;
+    border-radius: 15%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-family: inherit;
+    display: block;
+    margin-left: auto;
+    padding: 6px;
+}
+/* ============================ */
+/* <style for bg> ======== */
+button .menu__icon {
+    border-radius: 16px;
+    border: 1px solid #1a1a1a;
+    background: rgba(255, 255, 255, 0.39);
+    mix-blend-mode: luminosity;
+    box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+    backdrop-filter: blur(15px);
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+}
+
+/* <style for menu__icon> ======== */
+.menu__icon {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+}
+
+.menu__icon span {
+    display: block;
+    width: 100%;
+    height: 0.125rem;
+    border-radius: 6px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 .5px 2px 0 hsla(0, 0, 0, 0.2);
+    transition: background-color .4s;
+    position: relative;
+}
+
+.menu__icon span+span {
+margin-top: .375rem;
+}
+
+.menu__icon span:nth-child(1) {
+animation: ease .8s menu-icon-top-2 forwards;
+}
+
+.menu__icon span:nth-child(2) {
+animation: ease .8s menu-icon-scaled-2 forwards;
+}
+
+.menu__icon span:nth-child(3) {
+animation: ease .8s menu-icon-bottom-2 forwards;
+}
+
+.menu__icon:hover span:nth-child(1) {
+animation: ease .8s menu-icon-top forwards;
+background-color: rgb(255, 59, 48);
+}
+
+.menu__icon:hover span:nth-child(2) {
+animation: ease .8s menu-icon-scaled forwards;
+background-color: rgb(255, 59, 48);
+}
+
+.menu__icon:hover span:nth-child(3) {
+animation: ease .8s menu-icon-bottom forwards;
+background-color: rgb(255, 59, 48);
+}
+
+@keyframes menu-icon-top {
+0% {
+    top: 0;
+    transform: rotate(0);
+}
+
+50% {
+    top: .5rem;
+    transform: rotate(0);
+}
+
+100% {
+    top: .5rem;
+    transform: rotate(45deg);
+}
+}
+
+@keyframes menu-icon-top-2 {
+0% {
+    top: .5rem;
+    transform: rotate(45deg);
+}
+
+50% {
+    top: .5rem;
+    transform: rotate(0);
+}
+
+100% {
+    top: 0;
+    transform: rotate(0);
+}
+}
+
+@keyframes menu-icon-bottom {
+0% {
+    bottom: 0;
+    transform: rotate(0);
+}
+
+50% {
+    bottom: .5rem;
+    transform: rotate(0);
+}
+
+100% {
+    bottom: .5rem;
+    transform: rotate(135deg);
+}
+}
+
+@keyframes menu-icon-bottom-2 {
+0% {
+    bottom: .5rem;
+    transform: rotate(135deg);
+}
+
+50% {
+    bottom: .5rem;
+    transform: rotate(0);
+}
+
+100% {
+    bottom: 0;
+    transform: rotate(0);
+}
+}
+
+@keyframes menu-icon-scaled {
+50% {
+    transform: scale(0);
+}
+
+100% {
+    transform: scale(0);
+}
+}
+
+@keyframes menu-icon-scaled-2 {
+0% {
+    transform: scale(0);
+}
+
+50% {
+    transform: scale(0);
+}
+
+100% {
+    transform: scale(1);
+}
+}
+
+.button-container {
+    cursor: pointer;
+    display: flex;
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    width: 14%;
+    height: 50px;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 15px;
+    position: absolute; /* Make sure the button is positioned relative to its container */
+    top: 75%; /* 80% from the top */
+    left: 43%; /* Center horizontally */
+    z-index: 999; /* Bring it to the foreground */
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+.button-home {
+    outline: 0 !important;
+    border: 0 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+}
+
+
+.button-search {
+    outline: 0 !important;
+    border: 0 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+}
+
+.button-account {
+    outline: 0 !important;
+    border: 0 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+}
+
+.button-shop {
+    outline: 0 !important;
+    border: 0 !important;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+}
+
+.button-home:hover {
+    transform: translateY(-3px);
+}
+
+.button-search:hover {
+    transform: translateY(-3px);
+}
+
+.button-account:hover {
+    transform: translateY(-3px);
+}
+
+.button-shop:hover {
+    transform: translateY(-3px);
+}
+
+.icon2 {
+    font-size: 25px;
+}
+
+/* From Uiverse.io by Pradeepsaranbishnoi */ 
+/* GENERAL */
+
+.ob-wb {
+    display: none; /* Setze display auf block, um das Element sichtbar zu machen */
+    width: 18rem;
+    height: 17rem;
+    margin: auto;  /* Automatischer Margin für zentrierte Position */
+    position: absolute; /* Positionierung zur Zentrierung */
+    top: 20%;  /* Vertikale Zentrierung */
+    left: 60%; /* Horizontale Zentrierung */
+    position: absolute;
+    cursor: move;
+    z-index: 10;
+    user-select: none; /* Verhindert die Auswahl des Textes beim Ziehen */
+}
+
+.app {
+    cursor: pointer;
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    transition: all 450ms ease-in-out;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    width: 18rem;
+    height: 17rem;
+    border-radius: 40px;
+}
+
+.credit {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    color: white;
+}
+  
+.credit a {
+    color: inherit;
+}
+
+/* Main Circle */
+.main-circle {
+    width: 40rem;
+    height: 40rem;
+    border-radius: 100%;
+    background: linear-gradient(40deg, #FF0080,#FF8C00 70%);
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    -webkit-transform: translate(-50%, -70%);
+    -ms-transform: translate(-50%, -70%);
+    transform: translate(-50%, -70%)
+}
+
+/* Phone */
+.phone {
+    position: relative;
+    z-index: 2;
+    width: 18rem;
+    height: 17rem;
+    background-color: inherit;
+    -webkit-box-shadow: 0 4px 35px rgba(0,0,0,.1);
+    box-shadow: 0 4px 35px rgba(0,0,0,.1);
+    border-radius: 40px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+
+
+/* Top */
+.menu {
+    /*   background-color: blue; */
+    font-size: 80%;
+    opacity: .4;
+    padding: .8rem 1.8rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.icons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: .5rem;
+}
+
+.battery {
+    width: .85rem;
+    height: .45rem;
+    background-color: black;
+}
+
+.network {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 6.8px 7.2px 6.8px;
+    border-color: transparent transparent black transparent;
+    -webkit-transform: rotate(135deg);
+    -ms-transform: rotate(135deg);
+    transform: rotate(135deg);
+    margin: .12rem .5rem;
+}
+
+/* Middle */
+.content {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: auto;
+    text-align: center;
+    width: 70%;
+    -webkit-transform: translateY(5%);
+    -ms-transform: translateY(5%);
+    transform: translateY(5%);
+}
+
+.circle {
+    position: relative;
+    border-radius: 100%;
+    width: 8rem;
+    height: 8rem;
+    background: linear-gradient(40deg, #FF0080,#FF8C00 70%);
+    margin: auto;
+}
+
+.crescent {
+    position: absolute;
+    border-radius: 100%;
+    right: 0;
+    width: 6rem;
+    height: 6rem;
+    background: white;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: top right;
+    -ms-transform-origin: top right;
+    transform-origin: top right;
+    -webkit-transition: -webkit-transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: -webkit-transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: transform .6s cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+label, .toggle {
+    height: 2.8rem;
+    border-radius: 100px;
+}
+
+label {
+    width: 100%;
+    background-color: rgba(0,0,0,.1);
+    border-radius: 100px;
+    position: relative;
+    margin: 1.8rem 0 4rem 0;
+    cursor: pointer;
+}
+
+.toggle {
+    position: absolute;
+    width: 50%;
+    background-color: #fff;
+    -webkit-box-shadow: 0 2px 15px rgba(0,0,0,.15);
+    box-shadow: 0 2px 15px rgba(0,0,0,.15);
+    -webkit-transition: -webkit-transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: -webkit-transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94), -webkit-transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.names {
+    font-size: 90%;
+    font-weight: bolder;
+    color: black;
+    width: 65%;
+    margin-left: 17.5%;
+    margin-top: 6.5%;
+    position: absolute;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.dark {
+    opacity: .5;
+}
+
+.mark {
+    border-radius: 100px;
+    background-color: black;
+}
+
+.time {
+    color: black;
+}
+/* -------- Switch Styles ------------*/
+[type="checkbox"] {
+    display: none;
+}
+/* Toggle */
+[type="checkbox"]:checked + .app .toggle {
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
+    background-color: #34323D;
+}
+
+[type="checkbox"]:checked + .app .dark {
+    opacity: 1;
+    color: white;
+}
+
+[type="checkbox"]:checked + .app .light {
+    opacity: 1;
+    color: white;
+}
+/* App */
+[type="checkbox"]:checked + .app .body {
+    background: radial-gradient(circle,
+    rgba(30, 30, 30, 0.3) 0%,
+    rgba(50, 50, 50, 0.3) 50%,
+    rgba(15, 15, 15, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+/* Circle */
+[type="checkbox"]:checked + .app .crescent {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    background: black;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+}
+
+[type="checkbox"]:checked + .app .circle {
+    background: linear-gradient(40deg, #8983F7, #A3DAFB 70%);
+}
+
+[type="checkbox"]:checked + .app .main-circle {
+    background: linear-gradient(40deg, #8983F7, #A3DAFB 70%);
+}
+
+[type="checkbox"]:checked + .time {
+    color: white;
+}
+
+[type="checkbox"]:checked + .app .body .phone .menu .time {
+    color: white;
+}
+
+[type="checkbox"]:checked + .app .body .phone .menu .icons .network {
+    border-color: transparent transparent white transparent;
+}
+
+[type="checkbox"]:checked + .app .body .phone .menu .icons .battery {
+    background-color: white;
+}
+
+[type="checkbox"]:checked + .app .body {
+    border-radius: 40px;
+}
+
+/* From Uiverse.io by zanina-yassine */
+.wetterc {
+    display: none; /* Setze display auf block, um das Element sichtbar zu machen */
+    width: 18rem;
+    height: 17rem;
+    margin: auto;  /* Automatischer Margin für zentrierte Position */
+    position: absolute; /* Positionierung zur Zentrierung */
+    top: 30%;  /* Vertikale Zentrierung */
+    left: 50%; /* Horizontale Zentrierung */
+    position: absolute;
+    cursor: move;
+    z-index: 10;
+    user-select: none; /* Verhindert die Auswahl des Textes beim Ziehen */
+}
+
+
+.card {
+    width: 350px;
+    height: 235px;
+    position: relative;
+    cursor: pointer;
+    padding: 25px;
+    background: radial-gradient(178.94% 106.41% at 26.42% 106.41%, rgba(175, 175, 175, 0.3) 0%, rgba(202, 202, 202, 0.3) 71.88%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, rgb(170, 170, 170, 0.3);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    transition: all 0.8s cubic-bezier(0.15, 0.83, 0.66, 1);
+}
+
+.container {
+    width: 250px;
+    height: 250px;
+    position: absolute;
+    right: -35px;
+    top: -50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.7);
+}
+
+.cloud {
+    width: 250px;
+}
+
+.front {
+    padding-top: 45px;
+    margin-left: 25px;
+    display: inline;
+    position: absolute;
+    z-index: 11;
+    animation: clouds 8s infinite;
+    animation-timing-function: ease-in-out;
+    background-color: none;
+}
+
+.back {
+    margin-top: -30px;
+    margin-left: 150px;
+    z-index: 12;
+    animation: clouds 12s infinite;
+    animation-timing-function: ease-in-out;
+    background-color: none;
+}
+
+.right-front {
+    width: 45px;
+    height: 45px;
+    border-radius: 50% 50% 50% 0%;
+    background-color: #4c9beb;
+    display: inline-block;
+    margin-left: -25px;
+    z-index: 5;
+}
+
+.left-front {
+    width: 65px;
+    height: 65px;
+    border-radius: 50% 50% 0% 50%;
+    background-color: #4c9beb;
+    display: inline-block;
+    z-index: 5;
+}
+
+.right-back {
+    width: 50px;
+    height: 50px;
+    border-radius: 50% 50% 50% 0%;
+    background-color: #4c9beb;
+    display: inline-block;
+    margin-left: -20px;
+    z-index: 5;
+}
+
+.left-back {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 0% 50%;
+    background-color: #4c9beb;
+    display: inline-block;
+    z-index: 5;
+}
+
+.sun {
+    width: 120px;
+    height: 120px;
+    background: -webkit-linear-gradient(to right, #fcbb04, #fffc00);
+    background: linear-gradient(to right, #fcbb04, #fffc00);
+    border-radius: 60px;
+    display: inline;
+    position: absolute;
+}
+
+.sunshine {
+    animation: sunshines 2s infinite;
+}
+
+@keyframes sunshines {
+0% {
+    transform: scale(1);
+    opacity: 0.6;
+}
+
+100% {
+    transform: scale(1.4);
+    opacity: 0;
+}
+}
+
+@keyframes clouds {
+0% {
+    transform: translateX(15px);
+}
+
+50% {
+    transform: translateX(0px);
+}
+
+100% {
+    transform: translateX(15px);
+}
+}
+
+.card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: none;
+}
+
+.card-header span:first-child {
+    word-break: break-all;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 135%;
+    color: rgba(255, 255, 255, 0.66);
+    background-color: none;
+}
+
+.card-header span:last-child {
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 135%;
+    color: rgba(255, 255, 255, 0.33);
+    background-color: none;
+}
+
+.temp {
+    position: absolute;
+    left: 25px;
+    bottom: 12px;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 77px;
+    color: rgb(255, 255, 255);
+    background-color: none;
+}
+
+.temp-scale {
+    width: 80px;
+    height: 36px;
+    position: absolute;
+    right: 25px;
+    bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 9px;
+}
+
+.temp-scale span {
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 134.49%;
+    color: rgba(255, 255, 255, 0.66);
+    background-color: none;
+}
+
+/* Schließen Button Styling */
+.close-button {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    background-color: none;
+}
+
+.close-button:hover {
+    font-size: 18px;
+}
+
+
+/* Schließen Button Styling */
+.close-button-chat {
+    position: absolute;
+    top: 4px;
+    right: 7px;
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    background-color: none;
+}
+
+.close-button-chat:hover {
+    font-size: 18px;
+}
+
+.outer-solution {
+    cursor: pointer;
+    display: none; /* Setze display auf block, um das Element sichtbar zu machen */
+    width: 18rem;
+    height: 17rem;
+    margin: auto;  /* Automatischer Margin für zentrierte Position */
+    position: absolute; /* Positionierung zur Zentrierung */
+    top: 50%;  /* Vertikale Zentrierung */
+    left: 50%; /* Horizontale Zentrierung */
+    position: absolute;
+    cursor: move;
+    z-index: 10;
+    user-select: none; /* Verhindert die Auswahl des Textes beim Ziehen */
+    width: 300px;
+    height: 250px;
+    border-radius: 10px;
+    padding: 1px;
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    position: absolute; /* Absolut positioniert */
+    top: calc(35%); /* 50% von oben + 30% nach unten */
+    left: 50%; /* 50% von links */
+}
+
+
+
+.dot {
+    cursor: pointer;
+    width: 5px;
+    aspect-ratio: 1;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0 0 10px #ffffff;
+    border-radius: 100px;
+    z-index: 2;
+    right: 10%;
+    top: 10%;
+    animation: moveDot 6s linear infinite;
+}
+
+@keyframes moveDot {
+    0%,
+    100% {
+        top: 10%;
+        right: 10%;
+    }
+    25% {
+        top: 10%;
+        right: calc(100% - 35px);
+    }
+    50% {
+        top: calc(100% - 30px);
+        right: calc(100% - 35px);
+    }
+    75% {
+        top: calc(100% - 30px);
+        right: 10%;
+    }
+}
+
+.card-outer {
+    cursor: pointer;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-size: 20px 20px;
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-direction: column;
+    color: #fff;
+    border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+
+}
+.ray {
+    width: 220px;
+    height: 45px;
+    border-radius: 100px;
+    position: absolute;
+    background-color: #c7c7c7;
+    opacity: 0.4;
+    box-shadow: 0 0 50px #fff;
+    filter: blur(10px);
+    transform-origin: 10%;
+    top: 0%;
+    left: 0;
+    transform: rotate(40deg);
+}
+
+.card-outer .text-outer {
+    font-weight: bolder;
+    font-size: 3rem;
+    background: linear-gradient(45deg, #a3a3a3 4%, #000000, #a1a1a1);
+    background-clip: text;
+    color: transparent;
+}
+
+.card-outer .text-outer-version {
+    font-weight: bolder;
+    font-size: 1.5rem;
+    background: linear-gradient(45deg, #747474 4%, #000000, #6e6e6e);
+    background-clip: text;
+    color: transparent;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    background-color: #9e9e9e;
+}
+.topl {
+    top: 10%;
+    background: linear-gradient(90deg, #888888 30%, #1d1f1f 70%);
+}
+.bottoml {
+    bottom: 10%;
+}
+.leftl {
+    left: 10%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, #747474 30%, #222424 70%);
+}
+.rightl {
+    right: 10%;
+    width: 1px;
+    height: 100%;
+}
+
+.card-years {
+    position: fixed; /* Position bleibt beim Scrollen im Vordergrund */
+    top: 60%; /* 80% von oben */
+    left: 50%; /* Horizontale Mitte */
+    transform: translateX(-50%); /* Zentrieren der Box */
+    display: flex;
+    gap: 10px; /* Optional: Abstand zwischen den Buttons */
+    background: radial-gradient(circle,
+        rgba(175, 175, 175, 0.3) 0%,
+        rgba(202, 202, 202, 0.3) 50%,
+        rgba(170, 170, 170, 0.3) 100%);
+    backdrop-filter: blur(10px); /* Glas-Effekt */
+    border-radius: 15px; /* Abgerundete Ecken auf allen Seiten */
+    border-width: 3px; /* Breite des Rahmens */
+    border-style: solid; /* Art des Rahmens */
+    border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+    box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+    padding: 4px;
+    z-index: 1000; /* Sicherstellen, dass die Box im Vordergrund bleibt */
+    width: 20%; /* 30% der Breite des Bildschirms */
+    height: 50px;
+    justify-content: space-around;
+}
+
+.button-years {
+    display: flex; /* Flexbox für zentrierten Inhalt */
+    justify-content: center; /* Horizontale Zentrierung */
+    align-items: center; /* Vertikale Zentrierung */
+    width: 100%; /* Optional: auf volle Breite setzen */
+    padding: 0 15px; /* Horizontales Padding */
+    margin: 3px; /* Abstand zwischen Buttons */
+    border: none; /* Kein Rand */
+    border-radius: 25px; /* Abgerundete Ecken */
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0.4) 100%); /* Hintergrundverlauf */
+    backdrop-filter: blur(10px); /* Unschärfe */
+    box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0); /* Schatten */
+    color: #666666; /* Textfarbe */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Schriftart */
+    font-size: 13px; /* Schriftgröße */
+    font-weight: bold; /* Schriftstärke */
+    text-transform: uppercase; /* Text in Großbuchstaben */
+    cursor: pointer; /* Cursor ändern bei Hover */
+    transition: all 0.3s ease; /* Animationseffekt */
+}
+
+  .button-years:hover {
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0.6) 100%);
+    backdrop-filter: blur(10px);
+    color: #818080;
+    transform: translateY(-5px); /* Bewege den Button um 5px nach oben */
+    margin: 5px; /* Margen beibehalten */
+    padding: 15px; /* Padding beibehalten */
+
+  }
+  
+  .button-years:focus {
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0.8) 100%);
+    backdrop-filter: blur(10px);
+    color: #818080;
+    transition: all 800ms ease;
+  }

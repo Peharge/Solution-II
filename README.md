@@ -1,10 +1,9 @@
-<br>
 <p align="center">
-    <img src="smn-logo2.svg" width="300"/>
+    <img src="./images-readme/solution.ico" width="250"/>
 </p>
 <br>
 <div align="center">
-<img alt="solution" src="https://img.shields.io/badge/Solution-F7DF1E">
+<img alt="woyzy" src="https://img.shields.io/badge/Solution-F7DF1E">
 <img alt="tg-loerrach" src="https://img.shields.io/badge/Peharge-red">
 <br>
 <br>
@@ -35,4 +34,14 @@
 
 ## Solution
 
-🚨 IMPORTANT: NOT PUBLIC YET!!! 🚨
+> Soon more
+
+## News
+
+- **[2024.10.01]** Start ;-)
+- **[2024.10.03]** Basic main4.py (Probleme [Checkliste](#checkliste))
+- **[2024.10.05]** Test main2-test.py (Ist nur für Text -> Audio, kann verwendet werden für Testzwecke)
+
+## Lizenz
+
+Dieses Projekt ist unter der MIT-Lizenz lizenziert – siehe die [LICENSE](LICENSE) Datei für Details.

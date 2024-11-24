@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Camera App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f8f9fa;
+        }
+
+        /* Kamera soll das ganze Fenster füllen */
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Taskleiste in der Mitte und um 50px nach oben verschoben */
+        .taskbar {
+            position: absolute;
+            bottom: 50px; /* Taskleiste um 50px nach oben verschoben */
+            left: 50%; /* Zentriert horizontal */
+            transform: translateX(-50%); /* Korrektur für horizontale Zentrierung */
+            width: 35%; /* 30% der Breite des Bildschirms */
+            height: 100px;
+            background: radial-gradient(circle,
+                rgba(175, 175, 175, 0.3) 0%,
+                rgba(202, 202, 202, 0.3) 50%,
+                rgba(170, 170, 170, 0.3) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-solution {
+            display: none;
+            position: absolute;
+            left: 50%; /* Zentriert horizontal */
+            transform: translateX(-50%); /* Korrektur für horizontale Zentrierung */
+            width: 40%; /* 30% der Breite des Bildschirms */
+            height: 600px;
+            background: radial-gradient(circle,
+                rgba(175, 175, 175, 0.3) 0%,
+                rgba(202, 202, 202, 0.3) 50%,
+                rgba(170, 170, 170, 0.3) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+            margin-top: 00px; /* Fügt einen Abstand von 350px nach oben hinzu */
+        }
+
+                /* Button für Bild aufnehmen */
+        .capture-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border: none;
+            outline: none;
+        }
+
+        .chat-btn {
+            border: none;
+            width: 6em;
+            height: 4em;
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            cursor: pointer;
+            transition: all 450ms ease-in-out;
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0); /* Farbe des Rahmens */
+            margin-left: 50px; /* Verschiebt das Element um 100px nach rechts */
+        }
+
+        .sparkle {
+            fill: #666666;
+            transition: all 800ms ease;
+        }
+
+        .text {
+            font-weight: 600;
+            color: #666666;
+            font-size: medium;
+        }
+
+        .chat-btn:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+            box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border: none;
+            border-radius: 25px;
+            width: 8em;
+            height: 4em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-btn:hover .text {
+            color: white;
+        }
+
+        .chat-btn:hover .sparkle {
+            fill: white;
+            transform: scale(1.2);
+        }
+
+
+        /* Rundes Vorschaubild */
+        .preview-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+            margin-right: 20px;
+            border: none;
+            border-radius: 4em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            cursor: pointer;
+            transition: all 450ms ease-in-out;
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .preview-image:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+            box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            margin-right: 25px;
+            border-radius: 7em;
+        }
+
+        .preview-image:hover .text {
+            color: white;
+        }
+
+        .preview-image:hover .sparkle {
+            fill: white;
+            transform: scale(1.2);
+        }
+
+        /* Button für Bild aufnehmen */
+        .capture-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            border: none;
+            outline: none;
+        }
+
+        .capture-btn {
+            border: none;
+            width: 8em;
+            height: 3em;
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            cursor: pointer;
+            transition: all 450ms ease-in-out;
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0); /* Farbe des Rahmens */
+            margin-left: 50px; /* Verschiebt das Element um 100px nach rechts */
+        }
+
+        .sparkle {
+            fill: #ffffff;
+            transition: all 800ms ease;
+        }
+
+        .text {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: medium;
+        }
+
+        .capture-btn:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+            box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border: none;
+            width: 10em;
+            height: 3em;
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .capture-btn:hover .text {
+            color: white;
+        }
+
+        .capture-btn:hover .sparkle {
+            fill: white;
+            transform: scale(1.2);
+        }
+
+        /* Modal-Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Erhöhung der Deckkraft für bessere Sichtbarkeit */
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Modal-Container mit Glas-Effekt */
+        .modal-container {
+            width: 90%;
+            max-width: 1200px;
+            height: auto; /* Anpassung an die Anzahl der Bilder */
+            max-height: 50%; /* Begrenzung auf 80% der Bildschirmhöhe */
+            top: -20%; /* Verschiebt das Element um 805 Pixel nach unten */
+            background: radial-gradient(circle,
+                rgba(175, 175, 175, 0.3) 0%,
+                rgba(202, 202, 202, 0.3) 50%,
+                rgba(170, 170, 170, 0.3) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            flex-direction: column; /* Flex für Header und Content */
+            justify-content: flex-start;
+            align-items: center;
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Modal-Header für Close-Button */
+        .modal-header {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end; /* Button rechts ausrichten */
+        }
+
+        .close-btn {
+            position: fixed; /* Position relativ zur gesamten Seite */
+            top: 10px; /* Abstand von oben */
+            right: 10px; /* Abstand von rechts */
+            cursor: pointer;
+            font-size: 15px;
+            background: transparent;
+            z-index: 1000; /* Sicherstellen, dass der Button über allen Elementen liegt */
+        }
+
+
+        /* Modal Content - Bilder Raster */
+        .modal-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Flexible Spalten */
+            grid-gap: 15px;
+            padding-top: 40px; /* Platz für das X */
+            width: 100%;
+            background: rgba(175, 175, 175, 0);
+            border-width: 3px;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0);
+        }
+
+        /* Bild mit abgerundeten Ecken */
+        .image-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Bild passt sich an den Container an */
+            border-radius: 15px;
+        }
+
+        /* Datum auf dem Bild */
+        .image-item .date {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #ffffff;
+            background: radial-gradient(circle,
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+
+        /* Remove this container when use*/
+        .component-title {
+            width: 100%;
+            position: absolute;
+            z-index: 999;
+            top: 30px;
+            left: 0;
+            padding: 0;
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .tab-container {
+            position: absolute; /* Ändere position auf absolute, um die genaue Position festzulegen */
+            top: 60%; /* Verschiebt das Element um 805 Pixel nach unten */
+
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+
+            padding: 2px;
+            color: #ffffff;
+
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 9px;
+            border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+        }
+
+
+        .indicator {
+            content: "";
+            width: 130px;
+            height: 28px;
+            background: radial-gradient(circle,
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            z-index: 9;
+            border: 0.5px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.12), 0px 3px 1px rgba(0, 0, 0, 0.04);
+            border-radius: 7px;
+            transition: all 0.2s ease-out;
+        }
+
+        .tab {
+        width: 130px;
+        height: 28px;
+        position: absolute;
+        z-index: 99;
+        outline: none;
+        opacity: 0;
+        }
+
+        .tab_label {
+        width: 130px;
+        height: 28px;
+
+        position: relative;
+        z-index: 999;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 0;
+
+        font-size: 0.75rem;
+        opacity: 0.6;
+
+        cursor: pointer;
+        }
+
+        .tab--1:checked ~ .indicator {
+        left: 2px;
+        }
+
+        .tab--2:checked ~ .indicator {
+        left: calc(130px + 2px);
+        }
+
+        .tab--3:checked ~ .indicator {
+        left: calc(130px * 2 + 2px);
+        }
+
+        .chat-solution {
+            display: none; /* Versteckt das Element standardmäßig */
+        }
+
+        .input {
+            padding: 1rem;
+            border-radius: 1rem;
+            transition: 0.3s;
+            display: flex;
+        }
+
+
+        .input {
+            bottom: 50px; /* Taskleiste um 50px nach oben verschoben */
+            left: 50%; /* Zentriert horizontal */
+            transform: translateX(-50%); /* Korrektur für horizontale Zentrierung */
+            width: 40%; /* 30% der Breite des Bildschirms */
+            height: 50px;
+            background: radial-gradient(circle,
+                rgba(175, 175, 175, 0.3) 0%,
+                rgba(202, 202, 202, 0.3) 50%,
+                rgba(170, 170, 170, 0.3) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Cool share button made by: csozi | Website: english.csozi.hu*/
+
+        .buttons {
+            position: relative;
+            display: grid;
+            place-items: center;
+            height: fit-content;
+            width: fit-content;
+            transition: 0.3s;
+            border-radius: 50%;
+            margin-left: 50px;
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        .buttons:hover {
+            padding: 60px;
+        }
+
+        .buttons:hover .button {
+            box-shadow: 5px 5px 12px #cacaca, -5px -5px 12px #ffffff;
+        }
+
+        .main-button {
+            position: relative;
+            display: grid;
+            place-items: center;
+            padding: 10px;
+            border: none;
+            background: radial-gradient(circle,
+                    rgba(255, 255, 255, 0.1) 0%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    rgba(255, 255, 255, 0.1) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            box-shadow: 5px 5px 12px #cacaca, -5px -5px 12px #ffffff;
+            border-radius: 50%;
+            transition: 0.2s;
+            z-index: 100;
+        }
+
+        .button {
+            position: absolute;
+            display: grid;
+            place-items: center;
+            padding: 10px;
+            border: none;
+                        background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px);
+            box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+            transition: 0.3s;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0);
+        }
+
+        .main-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+            box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .discord-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .discord-button {
+        translate: 70px 0px;
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+        transform: translateY(-2px);
+        backdrop-filter: blur(10px); /* Glas-Effekt */
+        display: block; /* SVG-Logo anzeigen, wenn die Klasse "active" hinzugefügt wird */
+        }
+
+        .twitter-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .twitter-button {
+            translate: 47px -47px;
+
+            box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+                inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+                0px 0px 0px 4px rgba(255, 255, 255, 0),
+                0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            display: block; /* SVG-Logo anzeigen, wenn die Klasse "active" hinzugefügt wird */
+        }
+
+        .reddit-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .reddit-button {
+        translate: 0px -70px;
+
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .messenger-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .messenger-button {
+        translate: -47px -47px;
+
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .pinterest-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .pinterest-button {
+        translate: -70px 0px;
+
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .instagram-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .instagram-button {
+        translate: -47px 47px;
+
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .snapchat-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .snapchat-button {
+        translate: 0px 70px;
+
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        .whatsapp-button:hover {
+            background: linear-gradient(0deg,rgb(164, 124, 243, 0.5),rgba(104, 63, 234, 0.5));
+        }
+
+        .buttons:hover .whatsapp-button {
+        translate: 47px 47px;
+
+        box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.2),
+            inset 0px -4px 0px 0px rgba(0, 0, 0, 0.2),
+            0px 0px 0px 4px rgba(255, 255, 255, 0),
+            0px 0px 180px 0px rgba(153, 23, 255);
+            transform: translateY(-2px);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+        }
+
+        /* From Uiverse.io by ArturCodeCraft */
+        /* <reset-style> ============================ */
+        .menu__icon {
+            border: none;
+            background: radial-gradient(circle,
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+            transition: 0.3s;
+            border-radius: 15%;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            font-family: inherit;
+            display: block;
+            margin-left: auto;
+            padding: 6px;
+        }
+        /* ============================ */
+        /* <style for bg> ======== */
+        button .menu__icon {
+            border-radius: 16px;
+            border: 1px solid #1a1a1a;
+            background: rgba(255, 255, 255, 0.39);
+            mix-blend-mode: luminosity;
+            box-shadow: 5px 5px 12px rgba(202, 202, 202, 0), -5px -5px 12px rgba(255, 255, 255, 0);
+            backdrop-filter: blur(15px);
+            width: 65px;
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 6px;
+        }
+
+        /* <style for menu__icon> ======== */
+        .menu__icon {
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+        }
+
+        .menu__icon span {
+            display: block;
+            width: 100%;
+            height: 0.125rem;
+            border-radius: 6px;
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 .5px 2px 0 hsla(0, 0, 0, 0.2);
+            transition: background-color .4s;
+            position: relative;
+        }
+
+        .menu__icon span+span {
+        margin-top: .375rem;
+        }
+
+        .menu__icon span:nth-child(1) {
+        animation: ease .8s menu-icon-top-2 forwards;
+        }
+
+        .menu__icon span:nth-child(2) {
+        animation: ease .8s menu-icon-scaled-2 forwards;
+        }
+
+        .menu__icon span:nth-child(3) {
+        animation: ease .8s menu-icon-bottom-2 forwards;
+        }
+
+        .menu__icon:hover span:nth-child(1) {
+        animation: ease .8s menu-icon-top forwards;
+        background-color: rgb(255, 59, 48);
+        }
+
+        .menu__icon:hover span:nth-child(2) {
+        animation: ease .8s menu-icon-scaled forwards;
+        background-color: rgb(255, 59, 48);
+        }
+
+        .menu__icon:hover span:nth-child(3) {
+        animation: ease .8s menu-icon-bottom forwards;
+        background-color: rgb(255, 59, 48);
+        }
+
+        @keyframes menu-icon-top {
+        0% {
+            top: 0;
+            transform: rotate(0);
+        }
+
+        50% {
+            top: .5rem;
+            transform: rotate(0);
+        }
+
+        100% {
+            top: .5rem;
+            transform: rotate(45deg);
+        }
+        }
+
+        @keyframes menu-icon-top-2 {
+        0% {
+            top: .5rem;
+            transform: rotate(45deg);
+        }
+
+        50% {
+            top: .5rem;
+            transform: rotate(0);
+        }
+
+        100% {
+            top: 0;
+            transform: rotate(0);
+        }
+        }
+
+        @keyframes menu-icon-bottom {
+        0% {
+            bottom: 0;
+            transform: rotate(0);
+        }
+
+        50% {
+            bottom: .5rem;
+            transform: rotate(0);
+        }
+
+        100% {
+            bottom: .5rem;
+            transform: rotate(135deg);
+        }
+        }
+
+        @keyframes menu-icon-bottom-2 {
+        0% {
+            bottom: .5rem;
+            transform: rotate(135deg);
+        }
+
+        50% {
+            bottom: .5rem;
+            transform: rotate(0);
+        }
+
+        100% {
+            bottom: 0;
+            transform: rotate(0);
+        }
+        }
+
+        @keyframes menu-icon-scaled {
+        50% {
+            transform: scale(0);
+        }
+
+        100% {
+            transform: scale(0);
+        }
+        }
+
+        @keyframes menu-icon-scaled-2 {
+        0% {
+            transform: scale(0);
+        }
+
+        50% {
+            transform: scale(0);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+        }
+
+        .button-container {
+            display: flex;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            cursor: pointer;
+            transition: all 450ms ease-in-out;
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 25px; /* Abgerundete Ecken auf allen Seiten */
+            border-width: 3px; /* Breite des Rahmens */
+            border-style: solid; /* Art des Rahmens */
+            border-color: rgba(255, 255, 255, 0.2); /* Farbe des Rahmens */
+            width: 250px;
+            height: 50px;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 15px;
+            position: absolute; /* Make sure the button is positioned relative to its container */
+            top: 80%; /* 80% from the top */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -80%); /* Center and adjust vertical position */
+            z-index: 999; /* Bring it to the foreground */
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .button-home {
+            outline: 0 !important;
+            border: 0 !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all ease-in-out 0.3s;
+            cursor: pointer;
+        }
+
+
+        .button-search {
+            outline: 0 !important;
+            border: 0 !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all ease-in-out 0.3s;
+            cursor: pointer;
+        }
+
+        .button-account {
+            outline: 0 !important;
+            border: 0 !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all ease-in-out 0.3s;
+            cursor: pointer;
+        }
+
+        .button-shop {
+            outline: 0 !important;
+            border: 0 !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: all ease-in-out 0.3s;
+            cursor: pointer;
+        }
+
+        .button-home:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-search:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-account:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-shop:hover {
+            transform: translateY(-3px);
+        }
+
+        .icon2 {
+            font-size: 25px;
+        }
+
+        /* From Uiverse.io by Pradeepsaranbishnoi */
+        /* GENERAL */
+
+        .app {
+            display: none;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            cursor: pointer;
+            transition: all 450ms ease-in-out;
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            z-index: 2;
+            width: 18rem;
+            height: 17rem;
+            border-radius: 40px;
+        }
+
+        .credit {
+            position: fixed;
+            right: 2rem;
+            bottom: 2rem;
+            color: white;
+            display: none;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.4) 50%,
+                rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+
+        }
+
+        .credit a {
+            color: inherit;
+            display: none;
+        }
+
+        /* Main Circle */
+        .main-circle {
+            width: 40rem;
+            height: 40rem;
+            border-radius: 100%;
+            background: linear-gradient(40deg, #FF0080,#FF8C00 70%);
+            position: absolute;
+            z-index: 1;
+            left: 50%;
+            -webkit-transform: translate(-50%, -70%);
+            -ms-transform: translate(-50%, -70%);
+            transform: translate(-50%, -70%);
+        }
+
+        /* Phone */
+        .phone {
+            position: relative;
+            z-index: 2;
+            width: 18rem;
+            height: 17rem;
+            background: radial-gradient(circle,
+                rgba(0, 0, 0, 0.4) 0%,
+                rgba(0, 0, 0, 0.4) 50%,
+                rgba(0, 0, 0, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            -webkit-box-shadow: 0 4px 35px rgba(0,0,0,.1);
+            box-shadow: 0 4px 35px rgba(0,0,0,.1);
+            border-radius: 40px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+
+
+        /* Top */
+        .menu {
+            /*   background-color: blue; */
+            font-size: 80%;
+            opacity: .4;
+            padding: .8rem 1.8rem;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+        .icons {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            margin-top: .5rem;
+        }
+
+        .battery {
+            width: .85rem;
+            height: .45rem;
+            background-color: black;
+        }
+
+        .network {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 6.8px 7.2px 6.8px;
+            border-color: transparent transparent black transparent;
+            -webkit-transform: rotate(135deg);
+            -ms-transform: rotate(135deg);
+            transform: rotate(135deg);
+            margin: .12rem .5rem;
+        }
+
+        /* Middle */
+        .content {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            margin: auto;
+            text-align: center;
+            width: 70%;
+            -webkit-transform: translateY(5%);
+            -ms-transform: translateY(5%);
+            transform: translateY(5%);
+        }
+
+        .circle {
+            position: relative;
+            border-radius: 100%;
+            width: 8rem;
+            height: 8rem;
+            background: linear-gradient(40deg, #FF0080,#FF8C00 70%);
+            margin: auto;
+        }
+
+        .crescent {
+            position: absolute;
+            border-radius: 100%;
+            right: 0;
+            width: 6rem;
+            height: 6rem;
+            background: white;
+            -webkit-transform: scale(0);
+            -ms-transform: scale(0);
+            transform: scale(0);
+            -webkit-transform-origin: top right;
+            -ms-transform-origin: top right;
+            transform-origin: top right;
+            -webkit-transition: -webkit-transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: -webkit-transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transition: transform .6s cubic-bezier(0.645, 0.045, 0.355, 1), -webkit-transform .6s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        label, .toggle {
+            height: 2.8rem;
+            border-radius: 100px;
+        }
+
+        label {
+            width: 100%;
+            background: radial-gradient(circle,
+                    rgba(255, 255, 255, 0.4) 0%,
+                    rgba(255, 255, 255, 0.4) 50%,
+                    rgba(255, 255, 255, 0.4) 100%);
+            backdrop-filter: blur(10px); /* Glas-Effekt */
+            border-radius: 100px;
+            position: relative;
+            margin: 1.8rem 0 4rem 0;
+            cursor: pointer;
+        }
+
+        .toggle {
+            position: absolute;
+            width: 50%;
+            background-color: #fff;
+            -webkit-box-shadow: 0 2px 15px rgba(0,0,0,.15);
+            box-shadow: 0 2px 15px rgba(0,0,0,.15);
+            -webkit-transition: -webkit-transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: -webkit-transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94), -webkit-transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .names {
+            font-size: 90%;
+            font-weight: bolder;
+            color: black;
+            width: 65%;
+            margin-left: 17.5%;
+            margin-top: 6.5%;
+            position: absolute;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .dark {
+        opacity: .5;
+        }
+
+        .mark {
+        border-radius: 100px;
+        background-color: black;
+        }
+
+        .time {
+        color: black;
+        }
+        /* -------- Switch Styles ------------*/
+        [type="checkbox"] {
+        display: none;
+        }
+        /* Toggle */
+        [type="checkbox"]:checked + .app .toggle {
+        -webkit-transform: translateX(100%);
+        -ms-transform: translateX(100%);
+        transform: translateX(100%);
+        background-color: #34323D;
+        }
+
+        [type="checkbox"]:checked + .app .dark {
+        opacity: 1;
+        color: white;
+        }
+
+        [type="checkbox"]:checked + .app .light {
+        opacity: 1;
+        color: white;
+        }
+        /* App */
+        [type="checkbox"]:checked + .app .body {
+        background-color: #26242E;
+        color: white;
+        }
+        /* Circle */
+        [type="checkbox"]:checked + .app .crescent {
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1);
+        background: #26242E;
+        }
+
+        [type="checkbox"]:checked + .app .circle {
+        background: linear-gradient(40deg, #8983F7, #A3DAFB 70%);
+        }
+
+        [type="checkbox"]:checked + .app .main-circle {
+        background: linear-gradient(40deg, #8983F7, #A3DAFB 70%);
+        }
+
+        [type="checkbox"]:checked + .time {
+        color: white;
+        }
+
+        [type="checkbox"]:checked + .app .body .phone .menu .time {
+        color: white;
+        }
+
+        [type="checkbox"]:checked + .app .body .phone .menu .icons .network {
+        border-color: transparent transparent white transparent;
+        }
+
+        [type="checkbox"]:checked + .app .body .phone .menu .icons .battery {
+        background-color: white;
+        }
+
+        [type="checkbox"]:checked + .app .body {
+        border-radius: 40px;
+        ;
+        }
+
+        .menu {
+            /*   background-color: blue; */
+            font-size: 80%;
+            opacity: .4;
+            padding: .8rem 1.8rem;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <div class="button-container">
+        <button class="button-home">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024" stroke-width="0" fill="currentColor" stroke="currentColor" class="icon2">
+            <path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"></path>
+          </svg>
+        </button>
+        <button class="button-search">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" aria-hidden="true" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon2">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linejoin="round" stroke-linecap="round"></path>
+          </svg>
+        </button>
+        <button class="button-account">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="0" fill="currentColor" stroke="currentColor" class="icon2">
+            <path d="M12 2.5a5.5 5.5 0 0 1 3.096 10.047 9.005 9.005 0 0 1 5.9 8.181.75.75 0 1 1-1.499.044 7.5 7.5 0 0 0-14.993 0 .75.75 0 0 1-1.5-.045 9.005 9.005 0 0 1 5.9-8.18A5.5 5.5 0 0 1 12 2.5ZM8 8a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"></path>
+          </svg>
+        </button>
+
+        <button class="button-shop">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" stroke-linejoin="round" stroke-linecap="round" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="icon2">
+            <circle r="1" cy="21" cx="9"></circle>
+            <circle r="1" cy="21" cx="20"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </button>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <img id="preview" class="preview-image" src="" alt="Preview">
+        <button class="capture-btn" id="take-photo">
+            <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" class="sparkle">
+                <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
+            </svg>
+
+            <span class="text">Generate</span>
+        </button>
+
+        <!-- Hier müssen neue Button hin -->
+
+        <div class="buttons">
+            <button class="main-button">
+            <svg width="30" height="30" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path d="M15.75 5.125a3.125 3.125 0 1 1 .754 2.035l-8.397 3.9a3.124 3.124 0 0 1 0 1.88l8.397 3.9a3.125 3.125 0 1 1-.61 1.095l-8.397-3.9a3.125 3.125 0 1 1 0-4.07l8.397-3.9a3.125 3.125 0 0 1-.144-.94Z"></path>
+            </svg>
+          </button>
+          <button class="discord-button button" id="discord-button" style="transition-delay: 0s, 0s, 0s; transition-property: translate, background, box-shadow;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" height="30" width="30">
+               <path d="M18.654 6.368a15.87 15.87 0 0 0-3.908-1.213.06.06 0 0 0-.062.03c-.17.3-.357.693-.487 1a14.628 14.628 0 0 0-4.39 0 9.911 9.911 0 0 0-.494-1 .061.061 0 0 0-.063-.03c-1.35.233-2.664.64-3.908 1.213a.05.05 0 0 0-.025.022c-2.49 3.719-3.172 7.346-2.837 10.928a.068.068 0 0 0 .025.045 15.936 15.936 0 0 0 4.794 2.424.06.06 0 0 0 .067-.023c.37-.504.699-1.036.982-1.595a.06.06 0 0 0-.034-.084 10.65 10.65 0 0 1-1.497-.714.06.06 0 0 1-.024-.08.06.06 0 0 1 .018-.022c.1-.075.201-.155.297-.234a.06.06 0 0 1 .061-.008c3.143 1.435 6.545 1.435 9.65 0a.062.062 0 0 1 .033-.005.061.061 0 0 1 .03.013c.096.08.197.159.298.234a.06.06 0 0 1 .016.081.062.062 0 0 1-.021.021c-.479.28-.98.518-1.499.713a.06.06 0 0 0-.032.085c.288.558.618 1.09.98 1.595a.06.06 0 0 0 .067.023 15.885 15.885 0 0 0 4.802-2.424.06.06 0 0 0 .025-.045c.4-4.14-.671-7.738-2.84-10.927a.04.04 0 0 0-.024-.023Zm-9.837 8.769c-.947 0-1.726-.87-1.726-1.935 0-1.066.765-1.935 1.726-1.935.968 0 1.74.876 1.726 1.935 0 1.066-.765 1.935-1.726 1.935Zm6.38 0c-.946 0-1.726-.87-1.726-1.935 0-1.066.764-1.935 1.725-1.935.969 0 1.741.876 1.726 1.935 0 1.066-.757 1.935-1.726 1.935Z"></path>
+            </svg>
+          </button>
+          <button class="twitter-button button" style="transition-delay: 0.1s, 0s, 0.1s; transition-property: translate, background, box-shadow;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" height="30" width="30">
+               <path d="M8.432 19.8c7.245 0 11.209-6.005 11.209-11.202 0-.168 0-.338-.007-.506A8.023 8.023 0 0 0 21.6 6.049a7.99 7.99 0 0 1-2.266.622 3.961 3.961 0 0 0 1.736-2.18 7.84 7.84 0 0 1-2.505.951 3.943 3.943 0 0 0-6.715 3.593A11.19 11.19 0 0 1 3.73 4.92a3.947 3.947 0 0 0 1.222 5.259 3.989 3.989 0 0 1-1.784-.49v.054a3.946 3.946 0 0 0 3.159 3.862 3.964 3.964 0 0 1-1.775.069 3.939 3.939 0 0 0 3.68 2.733 7.907 7.907 0 0 1-4.896 1.688 7.585 7.585 0 0 1-.936-.054A11.213 11.213 0 0 0 8.432 19.8Z"></path>
+            </svg>
+          </button>
+          <button class="reddit-button button" style="transition-delay: 0.2s, 0s, 0.2s; transition-property: translate, background, box-shadow;">
+            <svg width="30" height="30" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path d="M9.708 12a1.039 1.039 0 0 0-1.037 1.037c0 .574.465 1.05 1.037 1.04a1.04 1.04 0 0 0 0-2.077Zm2.304 4.559c.394 0 1.754-.048 2.47-.764a.29.29 0 0 0 0-.383.266.266 0 0 0-.382 0c-.442.454-1.408.61-2.088.61-.681 0-1.635-.156-2.089-.61a.266.266 0 0 0-.382 0 .266.266 0 0 0 0 .383c.705.704 2.065.763 2.471.763Zm1.24-3.509a1.04 1.04 0 0 0 1.039 1.037c.572 0 1.037-.476 1.037-1.037a1.039 1.039 0 0 0-2.075 0Z"></path>
+               <path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Zm-4.785-1.456c-.394 0-.753.155-1.015.406-1.001-.716-2.375-1.181-3.901-1.241l.667-3.127 2.173.466a1.038 1.038 0 1 0 1.037-1.087 1.037 1.037 0 0 0-.93.585l-2.422-.512a.254.254 0 0 0-.264.106.232.232 0 0 0-.035.096l-.74 3.485c-1.55.048-2.947.513-3.963 1.24a1.466 1.466 0 0 0-1.927-.082 1.454 1.454 0 0 0 .318 2.457 2.542 2.542 0 0 0-.037.441c0 2.244 2.614 4.07 5.836 4.07 3.222 0 5.835-1.813 5.835-4.07a2.73 2.73 0 0 0-.036-.44c.502-.227.86-.74.86-1.337 0-.813-.656-1.456-1.456-1.456Z"></path>
+          </svg>
+          </button>
+          <button class="messenger-button button" style="transition-delay: 0.3s, 0s, 0.3s; transition-property: translate, background, box-shadow;">
+            <svg width="30" height="30" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path d="M2 11.7C2 6.126 6.366 2 12 2s10 4.126 10 9.7c0 5.574-4.366 9.7-10 9.7-1.012 0-1.982-.134-2.895-.384a.799.799 0 0 0-.534.038l-1.985.877a.8.8 0 0 1-1.122-.707l-.055-1.779a.799.799 0 0 0-.269-.57C3.195 17.135 2 14.615 2 11.7Zm6.932-1.824-2.937 4.66c-.281.448.268.952.689.633l3.156-2.395a.6.6 0 0 1 .723-.003l2.336 1.753a1.501 1.501 0 0 0 2.169-.4l2.937-4.66c.283-.448-.267-.952-.689-.633l-3.156 2.395a.6.6 0 0 1-.723.003l-2.336-1.754a1.5 1.5 0 0 0-2.169.4v.001Z"></path>
+            </svg>
+          </button>
+          <button class="pinterest-button button" style="transition-delay: 0.4s, 0s, 0.4s; transition-property: translate, background, box-shadow;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" height="30" width="30">
+               <path d="M12.48 2.4a9.6 9.6 0 0 0-3.498 18.543c-.084-.76-.16-1.927.033-2.757.175-.75 1.125-4.772 1.125-4.772s-.287-.575-.287-1.424c0-1.336.774-2.332 1.738-2.332.818 0 1.214.614 1.214 1.352 0 .824-.524 2.055-.795 3.196-.226.955.48 1.735 1.422 1.735 1.706 0 3.018-1.8 3.018-4.397 0-2.298-1.653-3.904-4.01-3.904-2.732 0-4.335 2.048-4.335 4.165 0 .825.318 1.71.714 2.191a.288.288 0 0 1 .067.276c-.073.302-.235.955-.266 1.088-.042.176-.14.213-.322.129-1.2-.558-1.949-2.311-1.949-3.72 0-3.028 2.201-5.808 6.344-5.808 3.33 0 5.918 2.372 5.918 5.544 0 3.308-2.087 5.971-4.981 5.971-.974 0-1.888-.505-2.201-1.103l-.598 2.283c-.217.834-.803 1.879-1.194 2.516A9.6 9.6 0 1 0 12.48 2.4Z"></path>
+            </svg>
+          </button>
+          <button class="instagram-button button" style="transition-delay: 0.5s, 0s, 0.5s; transition-property: translate, background, box-shadow;">
+            <svg width="30" height="30" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path d="M12 2c-2.714 0-3.055.013-4.121.06-1.066.05-1.793.217-2.429.465a4.896 4.896 0 0 0-1.771 1.154A4.909 4.909 0 0 0 2.525 5.45c-.248.635-.416 1.362-.465 2.425C2.013 8.944 2 9.284 2 12.001c0 2.715.013 3.055.06 4.121.05 1.066.217 1.792.465 2.428a4.91 4.91 0 0 0 1.154 1.771 4.88 4.88 0 0 0 1.77 1.154c.637.247 1.362.416 2.427.465 1.068.047 1.408.06 4.124.06 2.716 0 3.055-.012 4.122-.06 1.064-.05 1.793-.218 2.43-.465a4.893 4.893 0 0 0 1.77-1.154 4.91 4.91 0 0 0 1.153-1.771c.246-.636.415-1.363.465-2.428.047-1.066.06-1.406.06-4.122s-.012-3.056-.06-4.124c-.05-1.064-.219-1.791-.465-2.426a4.907 4.907 0 0 0-1.154-1.771 4.888 4.888 0 0 0-1.771-1.154c-.637-.248-1.365-.416-2.429-.465-1.067-.047-1.406-.06-4.123-.06H12Zm-.896 1.803H12c2.67 0 2.987.008 4.04.057.975.044 1.505.208 1.858.344.466.181.8.399 1.15.748.35.35.566.683.747 1.15.138.352.3.882.344 1.857.049 1.053.059 1.37.059 4.039 0 2.668-.01 2.986-.059 4.04-.044.974-.207 1.503-.344 1.856a3.09 3.09 0 0 1-.748 1.149 3.09 3.09 0 0 1-1.15.747c-.35.137-.88.3-1.857.345-1.053.047-1.37.059-4.04.059s-2.987-.011-4.041-.059c-.975-.045-1.504-.208-1.856-.345a3.097 3.097 0 0 1-1.15-.747 3.1 3.1 0 0 1-.75-1.15c-.136-.352-.3-.882-.344-1.857-.047-1.054-.057-1.37-.057-4.041 0-2.67.01-2.985.057-4.039.045-.975.208-1.505.345-1.857.181-.466.399-.8.749-1.15a3.09 3.09 0 0 1 1.15-.748c.352-.137.881-.3 1.856-.345.923-.042 1.28-.055 3.144-.056v.003Zm6.235 1.66a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4ZM12 6.865a5.136 5.136 0 1 0-.16 10.272A5.136 5.136 0 0 0 12 6.865Zm0 1.801a3.334 3.334 0 1 1 0 6.668 3.334 3.334 0 0 1 0-6.668Z"></path>
+            </svg>
+          </button>
+          <button class="snapchat-button button" style="transition-delay: 0.6s, 0s, 0.6s; transition-property: translate, background, box-shadow;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" height="30" width="30">
+               <path d="M21.929 16.407c-.139-.378-.404-.58-.705-.748a1.765 1.765 0 0 0-.154-.08l-.273-.139c-.94-.499-1.674-1.127-2.183-1.872a4.234 4.234 0 0 1-.375-.664c-.043-.125-.04-.195-.01-.259a.424.424 0 0 1 .121-.125l.44-.289a14.1 14.1 0 0 0 .464-.306c.386-.27.656-.558.825-.878a1.745 1.745 0 0 0 .086-1.45c-.256-.672-.891-1.09-1.661-1.09-.206 0-.41.027-.609.082.008-.46-.002-.947-.043-1.424-.146-1.68-.734-2.56-1.347-3.263a5.367 5.367 0 0 0-1.368-1.1C14.204 2.27 13.15 2 11.998 2c-1.15 0-2.2.27-3.131.801-.515.29-.978.663-1.371 1.104-.613.703-1.2 1.584-1.347 3.263-.041.477-.05.965-.045 1.422a2.288 2.288 0 0 0-.608-.081c-.77 0-1.405.418-1.66 1.091a1.747 1.747 0 0 0 .083 1.451c.17.32.44.608.825.877.103.072.263.174.464.307l.424.276c.054.036.1.083.136.138.033.066.034.137-.015.271a4.204 4.204 0 0 1-.369.65c-.497.729-1.21 1.346-2.12 1.84-.481.255-.982.425-1.193 1-.16.435-.055.929.35 1.344.148.156.32.287.51.387a5.54 5.54 0 0 0 1.25.5c.09.023.176.061.253.113.148.13.128.325.324.61.099.147.225.275.37.375.413.286.876.303 1.369.322.444.018.947.038 1.521.225.238.08.486.233.773.41.687.423 1.63 1.003 3.207 1.003s2.525-.583 3.22-1.008c.284-.175.53-.325.761-.401.575-.19 1.079-.21 1.523-.226.491-.019.955-.038 1.369-.323.172-.12.315-.277.42-.46.142-.24.137-.409.27-.525a.783.783 0 0 1 .238-.108 5.552 5.552 0 0 0 1.268-.506c.2-.108.382-.25.536-.42l.005-.006c.38-.406.475-.886.32-1.309Zm-1.401.753c-.855.473-1.424.421-1.866.706-.375.242-.153.763-.425.95-.337.233-1.327-.015-2.607.408-1.056.349-1.73 1.352-3.629 1.352-1.898 0-2.556-1.001-3.63-1.355-1.277-.422-2.27-.175-2.604-.406-.273-.188-.052-.71-.427-.951-.442-.285-1.011-.234-1.865-.704-.545-.3-.236-.488-.055-.575 3.098-1.499 3.592-3.813 3.613-3.985.027-.207.056-.371-.173-.582-.221-.206-1.202-.813-1.475-1.003-.45-.315-.65-.629-.502-1.015.102-.268.351-.369.612-.369.083 0 .166.01.247.028.495.107.975.356 1.252.422a.477.477 0 0 0 .103.014c.147 0 .2-.075.19-.244-.033-.541-.11-1.596-.024-2.582.117-1.355.555-2.028 1.074-2.622.25-.286 1.42-1.525 3.662-1.525 2.24 0 3.415 1.234 3.664 1.52.52.593.957 1.265 1.073 2.622.085.985.012 2.04-.023 2.581-.013.178.042.244.19.244a.442.442 0 0 0 .102-.013c.278-.067.759-.316 1.253-.422a1.14 1.14 0 0 1 .246-.029c.262 0 .511.102.612.369.147.386-.05.7-.5 1.015-.273.19-1.255.797-1.476 1.002-.23.212-.2.375-.174.583.023.175.517 2.489 3.613 3.986.184.091.492.278-.051.58Z"></path>
+            </svg>
+          </button>
+          <button class="whatsapp-button button" style="transition-delay: 0.7s, 0s, 0.7s; transition-property: translate, background, box-shadow;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ffffff" height="30" width="30">
+               <path d="M19.001 4.908A9.817 9.817 0 0 0 11.992 2C6.534 2 2.085 6.448 2.08 11.908c0 1.748.458 3.45 1.321 4.956L2 22l5.255-1.377a9.916 9.916 0 0 0 4.737 1.206h.005c5.46 0 9.908-4.448 9.913-9.913A9.872 9.872 0 0 0 19 4.908h.001ZM11.992 20.15A8.216 8.216 0 0 1 7.797 19l-.3-.18-3.117.818.833-3.041-.196-.314a8.2 8.2 0 0 1-1.258-4.381c0-4.533 3.696-8.23 8.239-8.23a8.2 8.2 0 0 1 5.825 2.413 8.196 8.196 0 0 1 2.41 5.825c-.006 4.55-3.702 8.24-8.24 8.24Zm4.52-6.167c-.247-.124-1.463-.723-1.692-.808-.228-.08-.394-.123-.556.124-.166.246-.641.808-.784.969-.143.166-.29.185-.537.062-.247-.125-1.045-.385-1.99-1.23-.738-.657-1.232-1.47-1.38-1.716-.142-.247-.013-.38.11-.504.11-.11.247-.29.37-.432.126-.143.167-.248.248-.413.082-.167.043-.31-.018-.433-.063-.124-.557-1.345-.765-1.838-.2-.486-.404-.419-.557-.425-.142-.009-.309-.009-.475-.009a.911.911 0 0 0-.661.31c-.228.247-.864.845-.864 2.067 0 1.22.888 2.395 1.013 2.56.122.167 1.742 2.666 4.229 3.74.587.257 1.05.408 1.41.523.595.19 1.13.162 1.558.1.475-.072 1.464-.6 1.673-1.178.205-.58.205-1.075.142-1.18-.061-.104-.227-.165-.475-.29Z"></path>
+            </svg>
+          </button>
+          </div>
+
+    </div>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-container">
+                <button class="menu__icon" id="close-modal">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
+            <div class="modal-content" id="modal-content">
+                <!-- Dynamische Bilder hier -->
+            </div>
+        </div>
+        <div class="tab-container">
+            <input type="radio" name="tab" id="tab1" class="tab tab--1" />
+            <label class="tab_label" for="tab1">2022</label>
+
+            <input type="radio" name="tab" id="tab2" class="tab tab--2" />
+            <label class="tab_label" for="tab2">2023</label>
+
+            <input type="radio" name="tab" id="tab3" class="tab tab--3" />
+            <label class="tab_label" for="tab3">2024</label>
+
+            <div class="indicator"></div>
+        </div>
+
+    </div>
+
+        <!-- Div, das standardmäßig nicht angezeigt wird -->
+    <div class="chat-solution" id="chatSolution">
+        <button class="close-btn" id="close-modal">&times;</button>
+        <input type="text" name="text" class="input" placeholder="Type here...">
+    </div>
+
+    <input id="switch" type="checkbox" class="switchclass">
+    <div id="appid" class="app">
+
+        <div class="body">
+
+            <div class="phone">
+
+                <button class="menu__icon" id="close-modal-lite">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <div class="menu">
+                    <div class="time">4:20</div>
+                    <div class="icons">
+                    <div class="network"></div>
+                    <div class="battery"></div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="circle">
+                    <div class="crescent"></div>
+                    </div>
+
+                    <label for="switch">
+                    <div class="toggle"></div>
+                    <div class="names">
+                        <p class="light">Light</p>
+                        <p class="dark">Dark</p>
+                    </div>
+                    </label>
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const preview = document.getElementById('preview');
+        const takePhotoBtn = document.getElementById('take-photo');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+
+        let photos = []; // Array zum Speichern der Fotos und Daten
+
+        // Start camera stream automatisch
+        async function startCamera() {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            video.srcObject = stream;
+        }
+
+        // Initialisiere Kamera
+        startCamera();
+
+        // Funktion zum Bild aufnehmen
+        takePhotoBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const image = canvas.toDataURL('image/png');
+            const timestamp = new Date();
+
+            // Füge das Bild und das Datum zum Array hinzu
+            photos.push({ image, timestamp });
+
+            // Zeige das Bild als Vorschaubild in der Taskleiste
+            preview.src = image;
+            preview.style.display = 'block';
+        });
+        // Event Listener für das Schließen des Modals beim Klicken auf das "X"
+        document.getElementById('close-modal').addEventListener('click', () => {
+            modalOverlay.style.display = 'none'; // Modal ausblenden
+            chatSolution.style.display = 'none'; // Modal ausblenden
+        });
+
+        // Vorschau der Bilder und das Öffnen des Modals
+        preview.addEventListener('click', () => {
+            modalContent.innerHTML = ''; // Alte Inhalte löschen
+
+            // Zeige alle gespeicherten Bilder im Modal
+            photos.forEach(photo => {
+                const date = new Date(photo.timestamp);
+                const dateString = date.toLocaleString();
+
+                const photoItem = `
+                    <div class="image-item">
+                        <img src="${photo.image}" alt="Photo">
+                        <div class="date">${dateString}</div> <!-- Datum auf dem Bild -->
+                    </div>
+                `;
+
+                modalContent.innerHTML += photoItem;
+            });
+
+            modalOverlay.style.display = 'flex'; // Modal anzeigen
+        });
+
+        // Finde den Button und das Div mit der Klasse chat-solution
+        const discord = document.getElementById('discord-button');
+        const swit = document.getElementById('appid');
+
+        // Füge ein Event hinzu, das die Klasse 'open' beim Klick auf den Button toggelt
+        discord.addEventListener('click', () => {
+            swit.style.display = 'block';
+        });
+    </script>
+
+
+
+    </script>
+
+</body>
+</html>

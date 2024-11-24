@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solution</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:image:type" content="image/jpeg">
+
+    <link rel="icon" type="image/png" href="images/peharge-logo3.4.png" />
+    <meta property="og:image:width" content="300">
+    <meta property="og:image:height" content="300">
+    <meta property="og:updated_time" content="1440432930" />
+    <style>
+        /* Globale Einstellungen */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #000000;
+            color: #333;
+            overflow-x: hidden;
+            margin: 0;
+            height: 100vh;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,0,150,0.4), rgba(0,204,255,0.4)), radial-gradient(circle at 80% 80%, rgba(255,0,150,0.4), rgba(0,204,255,0.4));
+            background-repeat: no-repeat;
+        }
+
+        h1, h2 {
+            font-family: 'Roboto', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .hero {
+            background-image: 
+                linear-gradient(to bottom, 
+                    rgba(0,0,0,1) 0%, /* Farbwert des ersten Radialverlaufs oben */
+                    rgba(0,0,0,0) 10%, /* Farbe bleibt bis 10% sichtbar */
+                    rgba(0,0,0,0) 90%, /* Farbe wechselt zu `rgba(0,204,255,0.4)` ab 90% */
+                    rgba(0,0,0,1) 100%), /* Farbe bleibt bis zum Ende sichtbar */
+                url('images/Robots GFS.png'); /* Das Bild, das über dem Verlauf liegt */
+
+            background-size: cover;
+            background-position: center;
+            height: 100vh; /* Vollbildhöhe */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden; /* Verhindert Überlauf des Glanzes */
+        }
+
+
+        
+        .hero h1 {
+            top: -10%;
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            font-size: 9em; /* Beispielgröße, nach Bedarf anpassen */
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 160px auto;
+            margin: 0;
+            padding: 0 20px;
+            line-height: 1.2;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Leuchteffekt-Animation */
+        .hero h1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%; /* Startposition links außerhalb des Containers */
+            width: 100%; /* Breiter als der Text, um eine vollständige Überdeckung zu gewährleisten */
+            height: 100%;
+            color: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0) 70%);
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            color: transparent;
+            transform: rotate(-30deg);
+            z-index: 1;
+            pointer-events: none;
+            animation: shine 3s linear infinite; /* Lange Dauer für einen sanften Effekt */
+        }
+        .hero .text-box {
+            position: absolute;
+            top: 65%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+            max-width: 65%;
+        }
+        .hero .text-box2 {
+            position: absolute;
+            top: 80%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+            max-width: 65%;
+        }
+        .hero .text-box p {
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            margin-bottom: 10px;
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero .text-box h2 {
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            margin-bottom: 10px;
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero .text-box2 h2 {
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            margin-bottom: 10px;
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero .text-box2 p {
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            margin-bottom: 10px;
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero .button-box {
+            position: absolute; /* Beibehalten der absoluten Positionierung */
+            top: 70%; /* Vertikale Mitte */
+            left: 50%; /* Horizontale Mitte */
+            transform: translate(-50%, -50%); /* Zentrale Ausrichtung der Box */
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            display: flex; /* Flexbox aktivieren */
+            flex-direction: column; /* Inhalte übereinander anordnen */
+            align-items: center; /* Horizontale Zentrierung der Inhalte */
+            justify-content: center; /* Vertikale Zentrierung der Inhalte */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+            width: 20%; /* Breite der Box */
+            height: 30%; /* Höhe der Box */
+        }
+
+        .hero .button-box h2 {
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            margin-bottom: 10px;
+            font-size: 36px; /* Beispiel für eine größere Schriftgröße, ändern Sie dies nach Bedarf */
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .hero .button-box p {
+            position: relative;
+            color: transparent; /* Hintergrundfarbe des Texts */
+            margin-bottom: 10px;
+            background: radial-gradient(
+                rgba(255, 255, 255, 1) 0%, 
+                rgba(153, 153, 153, 1) 50%, 
+                rgba(180, 180, 180, 1) 100%
+            );
+            -webkit-background-clip: text; /* für WebKit-basierte Browser */
+            background-clip: text; /* Standard für andere Browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+                top: -100%;
+            }
+            50% {
+                left: 100%;
+                top: 100%;
+            }
+            100% {
+                left: -100%;
+                top: -100%;
+            }
+        }
+
+        /* Stil für den Titel-Text beim Glanz */
+        .hero h1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: rgba(255, 255, 255, 0.5); /* Weißer Glanz-Effekt */
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero h1:hover::after {
+            opacity: 1; /* Glanz-Effekt beim Hover über den Titel */
+        }
+
+        /* Stil für den Titel-Text */
+        .hero h1 span {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Keyframes für Animationen */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .versions {
+            height: 800px; /* Höhe der Boxen */
+            width: 100%; /* Breite der Boxen */
+            background-image: 
+                linear-gradient(to bottom, 
+                    rgba(0,0,0,1) 0%, /* Farbwert des ersten Radialverlaufs oben */
+                    rgba(0,0,0,0) 10%, /* Farbe bleibt bis 10% sichtbar */
+                    rgba(0,0,0,0) 90%, /* Farbe wechselt zu `rgba(0,204,255,0.4)` ab 90% */
+                    rgba(0,0,0,1) 100%), /* Farbe bleibt bis zum Ende sichtbar */
+                url('images/solution-walpaper.png'); /* Das Bild, das über dem Verlauf liegt */
+            background-size: cover; /* Bild wird so skaliert, dass es die gesamte Sektion abdeckt */
+            background-position: center; /* Bild wird zentriert */
+            background-repeat: no-repeat; /* Bild wird nicht wiederholt */
+            padding: 20px; /* Abstand um den Inhalt herum */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 0 50px;
+            gap: 20px;
+        }
+
+
+                /* Weitere Sektionen */
+        .section {
+            margin: 0; /* Entfernen der Margen */
+            padding: 0; /* Entfernen der Polsterung */
+        }
+
+        /* Styling für die Versionen-Boxen */
+        .version-box {
+            height: 500px; /* Höhe der Boxen auf 300px setzen */
+            backdrop-filter: blur(10px); /* Verschwommener Glas-Effekt */
+            background: rgba(255, 255, 255, 0.4); /* Halbtransparenter Hintergrund */
+            border-radius: 10px;
+            padding: 20px;
+            width: calc(20% - 40px); /* Verhindert, dass die Boxen zu breit werden */
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Zentriert den Inhalt der Box vertikal */
+            background-size: cover; /* Das Bild wird so skaliert, dass es die gesamte Sektion abdeckt */
+            background-position: center; /* Das Bild wird zentriert */
+            background-repeat: no-repeat; /* Das Bild wird nicht wiederholt */
+            padding: 0 50px; /* Abstand an den Seiten */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; /* Zentriert die Boxen horizontal */
+            align-items: center; /* Zentriert die Boxen vertikal innerhalb der Sektion */
+            gap: 20px;
+        }
+
+        /* Verschiedene Farben für die Versionen-Boxen */
+        .version-box:nth-child(1) {
+            background: radial-gradient(circle, 
+                rgba(134, 134, 134, 0.3) 0%, 
+                rgba(255, 94, 85, 0.3) 50%, 
+                rgba(255, 50, 40, 0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 160px auto;
+        }
+        .version-box:nth-child(2) {
+            background: radial-gradient(circle, 
+                rgba(134, 134, 134, 0.3) 0%, 
+                rgba(255, 226, 97, 0.3) 50%, 
+                rgba(255, 201, 22, 0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 120px auto;
+        }
+        .version-box:nth-child(3) {
+            background: radial-gradient(circle, 
+                rgba(194, 194, 194, 0.3) 0%, 
+                rgba(97, 184, 255, 0.3) 50%, 
+                rgba(132, 255, 130, 0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 80px auto;
+        }
+        .version-box:nth-child(4) {
+            background: radial-gradient(circle, 
+                rgba(194, 194, 194, 0.3) 0%, 
+                rgba(255, 97, 97, 0.3) 50%, 
+                rgba(253, 255, 130, 0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 120px auto;
+        }
+        .version-box:nth-child(5) {
+            background: radial-gradient(circle, 
+                rgba(134, 134, 134, 0.3) 0%, 
+                rgba(85, 164, 255, 0.3) 50%, 
+                rgba(40, 140, 255, 0.3) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 160px auto;
+        }
+
+        /* Hover-Effekte für die Versionen-Boxen */
+        .version-box:hover {
+            transform: translateY(-25px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: rgba(240, 240, 240, 0.3);
+        }
+
+        /* Logo und Titel in jedem Version-Box */
+        .version-icon {
+            font-size: 50px;
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        /* Die Logos haben nun keine abgerundeten Ecken mehr */
+        .logo img {
+            width: 80px;
+            border-radius: 0;
+        }
+        .version-box h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .version-box h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .version-box p {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        /* Glas-Effekt für Details-Text */
+        .detail-row {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Details-Animation von links und rechts */
+        .details .detail-row:nth-child(odd) .detail-text {
+            transform: translateX(-100px);
+        }
+        .details .detail-row:nth-child(odd).show .detail-text {
+            transform: translateX(0);
+        }
+        .details .detail-row:nth-child(even) .detail-text {
+            transform: translateX(100px);
+        }
+        .details .detail-row:nth-child(even).show .detail-text {
+            transform: translateX(0);
+        }
+
+        .details .detail-row img {
+            width: 60px; /* Angepasste Bildgröße */
+            height: 60px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Abwechselnde Bild- und Text-Positionierung */
+        .details .detail-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        /* Folie-Sektion */
+        .slide-show {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+        }
+        .slide-show img {
+            height: 100%;
+            width: auto;
+            min-width: 100%;
+        }
+        .slide-show::before {
+            content: ''; /* Erforderlich für das Pseudoelement */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:                 linear-gradient(to bottom, 
+                    rgba(0,0,0,1) 0%, /* Farbwert des ersten Radialverlaufs oben */
+                    rgba(0,0,0,0) 10%, /* Farbe bleibt bis 10% sichtbar */
+                    rgba(0,0,0,0) 90%, /* Farbe wechselt zu `rgba(0,204,255,0.4)` ab 90% */
+                    rgba(0,0,0,1) 100%); /* Farbe bleibt bis zum Ende sichtbar */
+            pointer-events: none; /* Verhindert, dass das Überlagerungselement auf Benutzerinteraktionen reagiert */
+        }
+        .slide-show .text-box {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 65%;
+            color: #333;
+        }
+        .slide-show .text-box2 {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 65%;
+            color: #333;
+        }
+        .slide-show .text-box h2 {
+            margin-bottom: 10px;
+        }
+        .slide-show .text-box p {
+            font-size: 1.1rem;
+        }
+
+        /* Wiederholung der Folie */
+        .slide-show-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Responsive Anpassungen */
+        @media (max-width: 1000px) {
+            .version-box {
+                width: 45%;
+                max-width: none;
+            }
+            .details .detail-row {
+                flex-direction: column;
+            }
+            .details .detail-row img, .details .detail-text {
+                width: 100%;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .version-box {
+                width: 100%;
+            }
+            .slide-show .text-box {
+                position: static;
+                max-width: none;
+                margin-top: 20px;
+            }
+        }
+
+        .button-container {
+            padding: 3%;
+            background: radial-gradient(circle, rgba(175, 175, 175, 0.3) 0%, rgba(202, 202, 202, 0.3) 50%, rgba(170, 170, 170, 0.3) 100%);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border-width: 3px;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 3px 8px 5px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            flex-direction: column;
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* From Uiverse.io by ryota1231 */ 
+        .animated-button {
+            display: flex; /* Flexbox für einfache Ausrichtung */
+            align-items: center; /* Vertikale Zentrierung */
+            justify-content: center; /* Horizontale Zentrierung */
+            border: none;
+            width: 250px;
+            height: 55px;
+            border-radius: 25px;
+            padding: 0px 7px;
+            color: #fff;
+            font-size: 18px;
+            background-color: transparent;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 1), -1px -1px 6px rgba(255, 255, 255, 0.4);
+        }
+        
+        .animated-button:hover {
+            border: 2px solid transparent;
+            color: #fff;
+            box-shadow: 3px 3px 10px rgba(0,0,0,1),
+            -1px -1px 6px rgba(255, 255, 255, 0.4),
+            inset 3px 3px 10px rgba(0,0,0,1),
+            inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 1),  /* Schwarzer starker Schatten */
+            -1px -1px 6px rgba(255, 255, 255, 0.4); /* Weißer subtiler Schatten */
+        }
+
+        .container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 25px rgba(255, 255, 255, 0.25);
+            animation: animate_4010 8s ease-in-out infinite;
+        }
+
+        .bubble:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            left: 30%;
+            top: 20%;
+            animation-delay: -3s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            left: 70%;
+            top: 10%;
+            animation-delay: -5s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 180px;
+            height: 180px;
+            left: 20%;
+            top: 80%;
+            animation-delay: -4s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 220px;
+            height: 220px;
+            left: 80%;
+            top: 60%;
+            animation-delay: -6s;
+        }
+
+        /* Weitere Bubbles */
+        .bubble:nth-child(6) {
+            width: 120px;
+            height: 120px;
+            left: 50%;
+            top: 30%;
+            animation-delay: -2s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 200px;
+            height: 200px;
+            left: 10%;
+            top: 50%;
+            animation-delay: -4s;
+        }
+
+        .bubble:nth-child(8) {
+            width: 140px;
+            height: 140px;
+            left: 40%;
+            top: 70%;
+            animation-delay: -3s;
+        }
+
+        .bubble:nth-child(9) {
+            width: 180px;
+            height: 180px;
+            left: 60%;
+            top: 50%;
+            animation-delay: -5s;
+        }
+
+        .bubble:nth-child(10) {
+            width: 170px;
+            height: 170px;
+            left: 90%;
+            top: 20%;
+            animation-delay: -6s;
+        }
+
+        @keyframes animate_4010 {
+            0%, 100% {
+                transform: translateY(-20px);
+            }
+            50% {
+                transform: translateY(20px);
+            }
+        }
+
+        .bubble::before, .bubble::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            z-index: 10;
+            filter: blur(2px);
+        }
+
+        .bubble::before {
+            top: 50px;
+            left: 45px;
+            width: 30px;
+            height: 30px;
+        }
+
+        .bubble::after {
+            top: 80px;
+            left: 80px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .bubble span {
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .bubble span:nth-child(1) {
+            inset: 10px;
+            border-left: 15px solid #0fb4ff;
+            filter: blur(8px);
+        }
+
+        .bubble span:nth-child(2) {
+            inset: 10px;
+            border-right: 15px solid #ff4484;
+            filter: blur(8px);
+        }
+
+        .bubble span:nth-child(3) {
+            inset: 10px;
+            border-top: 15px solid #ffeb3b;
+            filter: blur(8px);
+        }
+
+        .bubble span:nth-child(4) {
+            inset: 30px;
+            border-left: 15px solid #ff4484;
+            filter: blur(12px);
+        }
+
+        .bubble span:nth-child(5) {
+            inset: 10px;
+            border-bottom: 10px solid #fff;
+            filter: blur(8px);
+            transform: rotate(330deg);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Titelbild mit zentralem Titel -->
+    <section class="hero">
+        <h1>Solution</h1>
+        <div class="button-box">
+            <h2>Los gehts</h2><br>
+                <button onclick="window.location.href='Sollution account.html'" class="animated-button">
+                    <span class="text">LOGIN</span>
+                </button><br><br>
+                <button onclick="window.location.href='create-new-sulution-account.html'" class="animated-button">
+                    <span class="text">CREATE ACCOUNT</span>
+                </button>
+        </div>
+    </section>
+
+    <!-- Versionen Übersicht -->
+    <section class="versions">
+        <div class="version-box">
+            <div class="logo">
+                <img src="images/solution-installer2.png" alt="Company Logo">
+                <h2><br>Solution Installer</h2>
+            </div>
+            <h3><strong>$0.0/month</strong></h3>
+            <p>Solution Installer is <br>an internet <br>distribution platform <br>for all Solution <br>products and many <br>other AI products, <br>just for you.</p>
+        </div>
+        <div class="version-box">
+            <div class="logo">
+                <img src="images/solution.png" alt="Company Logo">
+                <h2><br>Solution</h2>
+            </div>
+            <h3><strong>$19.90/month</strong></h3>
+            <p>Parameters 615<br>MMLU 94%<br>GPQA 76%<br>Math 86%<br><br><br><br><br><br></p>
+        </div>
+        <div class="version-box">
+            <div class="logo">
+                <img src="images/solution-ultra.png" alt="Company Logo">
+                <h2><br>Solution Ultra</h2>
+            </div>
+            <h3><strong>$89.90/month</strong></h3>
+            <p>Parameters 4615<br>MMLU 97%<br>GPQA 85%<br>Math 93%<br><br><br><br><br></p>
+        </div>
+        <div class="version-box">
+            <div class="logo">
+                <img src="images/solution-pro.png" alt="Company Logo">
+                <h2><br>Solution Pro</h2>
+            </div>
+            <h3><strong>$49.90/month</strong></h3>
+            <p>Parameters 2315<br>MMLU 96%<br>GPQA 81%<br>Math 89%<br><br><br><br><br></p>
+        </div>
+        <div class="version-box">
+            <div class="logo">
+                <img src="images/solution-shop2.png" alt="Company Logo">
+                <h2><br>Solution Server</h2>
+            </div>
+            <h3><strong>$129.90/month</strong></h3>
+            <p>Home ($129.90)<br>Storage 5TB<br>VRAM 1TB<br>Pro ($499.90)<br>Storage 10TB<br>VRAM 5TB<br>Ultra ($1299.90)<br>Storage 20TB<br>VRAM 15TB</p>
+        </div>
+    </section>
+
+    <!-- Folie-Sektion -->
+    <section class="slide-show-wrapper">
+        <section class="slide-show">
+            <img src="images/solution-walpaper2.png" alt="Sliding Image">
+            <div class="text-box">
+                <h2>Slide Title 1</h2>
+                <p>................................................................................................................................................................................................................................................</p>
+            </div>
+        </section>
+        <section class="slide-show">
+            <div class="text-box2">
+                <h2>Slide Title 2</h2>
+                <p>...................................................................................................................................................................................................................................................</p>
+            </div>
+            <img src="images/solution-walpaper2.png" alt="Sliding Image">
+        </section>
+        <section class="slide-show">
+            <img src="images/solution-walpaper2.png" alt="Sliding Image">
+            <div class="text-box">
+                <h2>Slide Title 3</h2>
+                <p>..........................................................................................................................................................................................</p>
+            </div>
+        </section>
+        <section class="slide-show">
+            <div class="text-box2">
+                <h2>Slide Title 4</h2>
+                <p>..........................................................................................................................................................................................</p>
+            </div>
+            <img src="images/solution-walpaper2.png" alt="Sliding Image">
+        </section>
+        <section class="slide-show">
+            <img src="images/solution-walpaper2.png" alt="Sliding Image">
+            <div class="text-box">
+                <h2>Slide Title 5</h2>
+                <p>............................................................................................................................................................................................................</p>
+            </div>
+        </section>
+    </section>
+
+    <!-- JavaScript für Scroll-Animation -->
+    <script>
+        const rows = document.querySelectorAll('.detail-row');
+        window.addEventListener('scroll', checkRows);
+
+        function checkRows() {
+            const triggerBottom = window.innerHeight / 5 * 4;
+            rows.forEach(row => {
+                const rowTop = row.getBoundingClientRect().top;
+                if (rowTop < triggerBottom) {
+                    row.classList.add('show');
+                }
+            });
+        }
+    </script>
+
+
+</body>
+</html>
