@@ -28,7 +28,7 @@
 <img alt="" src="https://img.shields.io/badge/-Hugging Face-FDEE21?logo=HuggingFace&logoColor=black">
 <img alt="" src="https://img.shields.io/badge/Jupyter notebook-orange">
 <img alt="" src="https://img.shields.io/badge/Google Colab-red">
-
+<br>
 <br>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
