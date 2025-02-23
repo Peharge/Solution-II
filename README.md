@@ -43,6 +43,7 @@
 - **[2024.10.01]** Start ;-)
 - **[2024.10.03]** Basic main4.py (Probleme [Checkliste](#checkliste))
 - **[2024.10.05]** Test main2-test.py (Ist nur für Text -> Audio, kann verwendet werden für Testzwecke)
+- **[2026.01.01]** Solution III
 
 ## Design
 
