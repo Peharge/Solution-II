@@ -3,7 +3,7 @@
 </p>
 <br>
 <div align="center">
-<img alt="woyzy" src="https://img.shields.io/badge/Solution-F7DF1E">
+<img alt="solution" src="https://img.shields.io/badge/Solution 2-F7DF1E">
 <img alt="tg-loerrach" src="https://img.shields.io/badge/Peharge-red">
 <br>
 <br>
@@ -34,9 +34,16 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 </div>
 
-## Solution
+## Solution 2
 
-> Soon more
+Solution 2 is an experimental AI-powered video chat assistant.
+You can have real-time conversations with it, and it also analyzes what's happening in the camera feed — enabling interactive and context-aware responses.
+
+💡 Designed to explore the fusion of video communication and AI perception.
+
+⚠️ Note: This project is currently undocumented and has not been updated since August 2024. Use at your own risk.
+
+Peharge
 
 ## News
 
