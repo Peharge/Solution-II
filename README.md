@@ -65,3 +65,11 @@ Peharge
 ## Lizenz
 
 Dieses Projekt ist unter der MIT-Lizenz lizenziert – siehe die [LICENSE](LICENSE) Datei für Details.
+
+<div align="center">
+
+### **_Peharge Terminal_**
+_Peharge Projects 2024_
+
+</div>
+
